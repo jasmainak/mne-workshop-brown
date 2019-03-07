@@ -27,8 +27,8 @@
   not_numbered: true
 
 # External link
-- title: GitHub repository
-  url: https://github.com/jupyter/jupyter-book
+- title: Install MNE
+  url: https://martinos.org/mne/stable/install_mne_python.html
   external: true
   not_numbered: true
 
@@ -54,3 +54,8 @@
   - title: Jupyter notebooks
     url: /features/notebooks
     not_numbered: true
+
+- title: Raw to Evoked
+  url: /plot_object_raw
+  not_numbered: true
+  expand_sections: true
