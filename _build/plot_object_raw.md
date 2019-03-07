@@ -71,6 +71,25 @@ print('%s channels x %s samples' % (len(raw), len(raw.times)))
 ```
 
 
+{:.output .output_stream}
+```
+Opening raw data file /local_mount/space/meghnn/1/users/mjas/mne_data/MNE-sample-data/MEG/sample/sample_audvis_raw.fif...
+    Read a total of 3 projection items:
+        PCA-v1 (1 x 102)  idle
+        PCA-v2 (1 x 102)  idle
+        PCA-v3 (1 x 102)  idle
+    Range : 25800 ... 192599 =     42.956 ...   320.670 secs
+Ready.
+Current compensation grade : 0
+Reading 0 ... 166799  =      0.000 ...   277.714 secs...
+Adding average EEG reference projection.
+1 projection items deactivated
+Average reference projection was added, but has not been applied yet. Use the apply_proj method to apply it.
+sample rate: 600.614990234375 Hz
+166800 channels x 166800 samples
+
+```
+
 <div class="alert alert-info"><h4>Note</h4><p>This size can also be obtained by examining `raw._data.shape`.
           However this is a private attribute as its name starts
           with an `_`. This suggests that you should **not** access this
@@ -110,6 +129,12 @@ _ = plt.title('Sample channels')
 ```
 
 
+
+{:.output .output_png}
+![png](/autofs/homes/001/mj513/Desktop/github_repos/mne-workshop-brown/_build/plot_object_raw_8_0.png)
+
+
+
 -----------------------------------------
 Selecting subsets of channels and samples
 -----------------------------------------
@@ -141,6 +166,15 @@ print(specific_chans)
 ```
 
 
+{:.output .output_stream}
+```
+<Raw  |  sample_audvis_raw.fif, n_channels x n_times : 305 x 166800 (277.7 sec), ~391.7 MB, data loaded>
+<Raw  |  sample_audvis_raw.fif, n_channels x n_times : 59 x 166800 (277.7 sec), ~78.2 MB, data loaded>
+<Raw  |  sample_audvis_raw.fif, n_channels x n_times : 203 x 166800 (277.7 sec), ~261.7 MB, data loaded>
+<Raw  |  sample_audvis_raw.fif, n_channels x n_times : 4 x 166800 (277.7 sec), ~8.1 MB, data loaded>
+
+```
+
 Notice the different scalings of these types
 
 
@@ -158,6 +192,12 @@ del eeg, meg, meg_only, grad_only, eeg_only, data, specific_chans
 ```
 
 
+
+{:.output .output_png}
+![png](/autofs/homes/001/mj513/Desktop/github_repos/mne-workshop-brown/_build/plot_object_raw_12_0.png)
+
+
+
 You can restrict the data to a specific time range
 
 
@@ -170,6 +210,12 @@ raw = raw.crop(0, 50)  # in seconds
 print('New time range from', raw.times.min(), 's to', raw.times.max(), 's')
 ```
 
+
+{:.output .output_stream}
+```
+New time range from 0.0 s to 50.00041705299622 s
+
+```
 
 And drop channels by name
 
@@ -184,6 +230,12 @@ raw = raw.drop_channels(['MEG 0241', 'EEG 001'])
 print('Number of channels reduced from', nchan, 'to', raw.info['nchan'])
 ```
 
+
+{:.output .output_stream}
+```
+Number of channels reduced from 376 to 374
+
+```
 
 --------------------------------------------------
 Concatenating :class:`Raw <mne.io.Raw>` objects
@@ -210,3 +262,9 @@ raw1.append([raw2, raw3])
 print('Time extends from', raw1.times.min(), 's to', raw1.times.max(), 's')
 ```
 
+
+{:.output .output_stream}
+```
+Time extends from 0.0 s to 40.00399655463821 s
+
+```
