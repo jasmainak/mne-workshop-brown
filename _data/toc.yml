@@ -54,6 +54,9 @@
   - title: Jupyter notebooks
     url: /features/notebooks
     not_numbered: true
+  - title: Raw to evoked
+    url: /features/plot_object_raw
+    not_numbered: true
 
 - title: Raw to Evoked
   url: /plot_object_raw
