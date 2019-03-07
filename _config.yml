@@ -70,9 +70,6 @@ binderhub_interact_text: Interact              # The text that interact buttons 
 use_thebelab_button: true                # If 'true', display a button to allow in-page running code cells with Thebelab
 thebelab_button_text: Thebelab                 # The text to display inside the Thebelab initialization button
 
-# Download settings
-use_download_button: true                # If 'true', display a button to download a zip file for the notebook
-download_button_text: Download                # The text that download buttons will contain
 
 #######################################################################################
 # Jupyter book extensions and additional features
@@ -80,13 +77,6 @@ download_button_text: Download                # The text that download buttons w
 # Bibliography and citation settings. See https://github.com/inukshuk/jekyll-scholar#configuration for options
 scholar:
   style: apa
-
-#######################################################################################
-# Option to add a Goggle analytics tracking code
-
-# Navigate to https://analytics.google.com, add a new property for your jupyter book and copy the tracking id here.
-google_analytics:
-  mytrackingcode:
 
 #######################################################################################
 # Jupyter book settings you probably don't need to change
