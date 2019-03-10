@@ -1,7 +1,6 @@
 # Requirements for the demo notebooks
 # Useful for MyBinder configuration
-pandas
 numpy
-datascience
-folium
+scipy
 matplotlib
+mne
