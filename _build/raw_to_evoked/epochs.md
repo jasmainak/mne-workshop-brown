@@ -8,8 +8,8 @@ prev_page:
   url: /raw_to_evoked/raw
   title: 'Raw data'
 next_page:
-  url: 
-  title: ''
+  url: /raw_to_evoked/evoked
+  title: 'Evoked'
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
 

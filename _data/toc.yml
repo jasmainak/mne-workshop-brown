@@ -54,3 +54,9 @@
   - title: Epochs
     url: /raw_to_evoked/epochs
     not_numbered: true
+  - title: Evoked
+    url: /raw_to_evoked/evoked
+    not_numbered: true
+  - title: Info
+    url: /raw_to_evoked/info
+    not_numbered: true
