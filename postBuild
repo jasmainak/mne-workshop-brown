@@ -1,0 +1,5 @@
+#!/usr/bin/env python3
+
+from mne.datasets import sample
+data_path = sample.data_path()
+

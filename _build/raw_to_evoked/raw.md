@@ -90,12 +90,11 @@ sample rate: 600.614990234375 Hz
 
 ```
 
-<div class="alert alert-info"><h4>Note</h4><p>This size can also be obtained by examining `raw._data.shape`.
-          However this is a private attribute as its name starts
-          with an `_`. This suggests that you should **not** access this
-          variable directly but rely on indexing syntax detailed just below.</p></div>
-
-
+**Note:**
+This size can also be obtained by examining `raw._data.shape`.
+However this is a private attribute as its name starts
+with an `_`. This suggests that you should **not** access this
+variable directly but rely on indexing syntax detailed just below.
 
 Information about the channels contained in the [Raw](https://martinos.org/mne/stable/generated/mne.io.Raw.html)
 object is contained in the https://martinos.org/mne/stable/generated/mne.Info.html#mne.Info attribute.
