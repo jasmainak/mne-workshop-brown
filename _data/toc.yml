@@ -44,18 +44,13 @@
 
 # A chapter w/ a collection of sections beneath it
 - title: Raw to evoked
-  url: /features/features
+  url: /raw_to_evoked/intro
   not_numbered: true
   expand_sections: true
   sections:
-  - title: Markdown files
-    url: /features/markdown
+  - title: Raw data
+    url: /raw_to_evoked/raw
     not_numbered: true
-  - title: Jupyter notebooks
-    url: /features/notebooks
+  - title: Epochs
+    url: /raw_to_evoked/epochs
     not_numbered: true
-
-- title: Raw to Evoked
-  url: /plot_object_raw
-  not_numbered: true
-  expand_sections: true

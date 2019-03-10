@@ -1,15 +1,15 @@
 ---
 redirect_from:
-  - "/plot-object-raw"
-interact_link: content/plot_object_raw.ipynb
+  - "/raw-to-evoked/raw"
+interact_link: content/raw_to_evoked/raw.ipynb
 kernel_name: python3
-title: 'Raw to Evoked'
+title: 'Raw data'
 prev_page:
-  url: /features/notebooks
-  title: 'Jupyter notebooks'
+  url: /raw_to_evoked/intro
+  title: 'Raw to evoked'
 next_page:
-  url: 
-  title: ''
+  url: /raw_to_evoked/epochs
+  title: 'Epochs'
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
 
@@ -23,13 +23,13 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 
 
 
-The :class:`Raw <mne.io.Raw>` data structure: continuous data
+The [Raw](https://martinos.org/mne/stable/generated/mne.io.Raw.html) data structure: continuous data
 =============================================================
 
-Continuous data is stored in objects of type :class:`Raw <mne.io.Raw>`.
+Continuous data is stored in objects of type [Raw](https://martinos.org/mne/stable/generated/mne.io.Raw.html).
 The core data structure is simply a 2D numpy array (channels × samples)
 (in memory or loaded on demand) combined with an
-:class:`Info <mne.Info>` object (`.info` attribute)
+[Info](https://martinos.org/mne/stable/generated/mne.Info.html#mne.Info) object (`.info` attribute)
 (see `tut_info_objects`).
 
 The most common way to load continuous data is from a .fif file. For more
@@ -73,7 +73,7 @@ print('%s channels x %s samples' % (len(raw), len(raw.times)))
 
 {:.output .output_stream}
 ```
-Opening raw data file /local_mount/space/meghnn/1/users/mjas/mne_data/MNE-sample-data/MEG/sample/sample_audvis_raw.fif...
+Opening raw data file /home/mainak/Desktop/projects/github_repos/mne-python/examples/MNE-sample-data/MEG/sample/sample_audvis_raw.fif...
     Read a total of 3 projection items:
         PCA-v1 (1 x 102)  idle
         PCA-v2 (1 x 102)  idle
@@ -97,8 +97,8 @@ sample rate: 600.614990234375 Hz
 
 
 
-Information about the channels contained in the :class:`Raw <mne.io.Raw>`
-object is contained in the :class:`Info <mne.Info>` attribute.
+Information about the channels contained in the [Raw](https://martinos.org/mne/stable/generated/mne.io.Raw.html)
+object is contained in the https://martinos.org/mne/stable/generated/mne.Info.html#mne.Info attribute.
 This is essentially a dictionary with a number of relevant fields (see
 `tut_info_objects`).
 
@@ -131,11 +131,10 @@ _ = plt.title('Sample channels')
 
 
 {:.output .output_png}
-![png](/home/mainak/Desktop/projects/mne-workshop-brown/_build/plot_object_raw_8_0.png)
+![png](../images/raw_to_evoked/raw_8_0.png)
 
 
 
------------------------------------------
 Selecting subsets of channels and samples
 -----------------------------------------
 
@@ -194,7 +193,7 @@ del eeg, meg, meg_only, grad_only, eeg_only, data, specific_chans
 
 
 {:.output .output_png}
-![png](/home/mainak/Desktop/projects/mne-workshop-brown/_build/plot_object_raw_12_0.png)
+![png](../images/raw_to_evoked/raw_12_0.png)
 
 
 
@@ -237,14 +236,11 @@ Number of channels reduced from 376 to 374
 
 ```
 
---------------------------------------------------
-Concatenating :class:`Raw <mne.io.Raw>` objects
+Concatenating  [Raw](https://martinos.org/mne/stable/generated/mne.io.Raw.html) objects
 --------------------------------------------------
 
-:class:`Raw <mne.io.Raw>` objects can be concatenated in time by using the
-:func:`append <mne.io.Raw.append>` function. For this to work, they must
-have the same number of channels and their :class:`Info
-<mne.Info>` structures should be compatible.
+[Raw](https://martinos.org/mne/stable/generated/mne.io.Raw.html) objects can be concatenated in time by using the
+[raw.append](https://martinos.org/mne/dev/generated/mne.io.Raw.html#mne.io.Raw.append) function. For this to work, they must have the same number of channels and their [Info](https://martinos.org/mne/stable/generated/mne.Info.html#mne.Info) structures should be compatible.
 
 
 
