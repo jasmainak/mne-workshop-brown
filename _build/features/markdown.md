@@ -2,7 +2,7 @@
 title: 'Markdown files'
 prev_page:
   url: /features/features
-  title: 'Features and customization'
+  title: 'Raw to evoked'
 next_page:
   url: /features/notebooks
   title: 'Jupyter notebooks'

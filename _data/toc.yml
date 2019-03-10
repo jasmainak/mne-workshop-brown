@@ -43,7 +43,7 @@
 - header: Demo textbook
 
 # A chapter w/ a collection of sections beneath it
-- title: Features and customization
+- title: Raw to evoked
   url: /features/features
   not_numbered: true
   expand_sections: true

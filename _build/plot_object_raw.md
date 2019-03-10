@@ -131,7 +131,7 @@ _ = plt.title('Sample channels')
 
 
 {:.output .output_png}
-![png](/autofs/homes/001/mj513/Desktop/github_repos/mne-workshop-brown/_build/plot_object_raw_8_0.png)
+![png](/home/mainak/Desktop/projects/mne-workshop-brown/_build/plot_object_raw_8_0.png)
 
 
 
@@ -194,7 +194,7 @@ del eeg, meg, meg_only, grad_only, eeg_only, data, specific_chans
 
 
 {:.output .output_png}
-![png](/autofs/homes/001/mj513/Desktop/github_repos/mne-workshop-brown/_build/plot_object_raw_12_0.png)
+![png](/home/mainak/Desktop/projects/mne-workshop-brown/_build/plot_object_raw_12_0.png)
 
 
 
