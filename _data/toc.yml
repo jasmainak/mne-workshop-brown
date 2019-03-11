@@ -60,3 +60,35 @@
   - title: Info
     url: /raw_to_evoked/info
     not_numbered: true
+- title: Preprocessing
+  url: /preprocessing/intro
+  not_numbered: true
+  expand_sections: true
+  sections:
+  - title: Filtering
+    url: /preprocessing/filtering
+    not_numbered: true
+  - title: Autoreject
+    url: /preprocessing/autoreject
+    not_numbered: true
+  - title: SSP
+    url: /preprocessing/ssp
+    not_numbered: true
+  - title: ICA
+    url: /preprocessing/ica
+    not_numbered: true
+- title: Evoked to source space
+  url: /evoked_to_stc/intro
+  not_numbered: true
+  expand_sections: true
+  sections:
+  - title: Covariance
+    url: /evoked_to_stc/cov
+    not_numbered: true
+  - title: Forward model
+    url: /evoked_to_stc/forward
+    not_numbered: true
+  - title: Source time course
+    url: /evoked_to_stc/stc
+    not_numbered: true
+
