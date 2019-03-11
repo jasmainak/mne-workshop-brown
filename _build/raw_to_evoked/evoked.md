@@ -23,12 +23,12 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 
 
 
-The :class:`Evoked <mne.Evoked>` data structure: evoked/averaged data
+The [mne.Evoked](https://martinos.org/mne/dev/generated/mne.Evoked.html) data structure: evoked/averaged data
 =====================================================================
 
-The :class:`Evoked <mne.Evoked>` data structure is mainly used for storing
-averaged data over trials. In MNE the evoked objects are usually created by
-averaging epochs data with :func:`mne.Epochs.average`.
+The [`mne.Evoked`](https://martinos.org/mne/dev/generated/mne.Evoked.html) data structure is mainly used for storing
+averageddata over trials. In MNE the evoked objects are usually created by
+averaging epochs data with [`mne.Epochs.average`](https://martinos.org/mne/dev/generated/mne.Epochs.html#mne.Epochs.average).
 
 
 
@@ -482,7 +482,7 @@ evoked.plot(time_unit='s')
 
 
 
-To write an evoked dataset to a file, use the :meth:`mne.Evoked.save` method.
-To save multiple categories to a single file, see :func:`mne.write_evokeds`.
+To write an evoked dataset to a file, use the [`mne.Evoked.save`](https://martinos.org/mne/dev/generated/mne.Evoked.html#mne.Evoked.save) method.
+To save multiple categories to a single file, see [`mne.write_evokeds`](https://martinos.org/mne/stable/generated/mne.write_evokeds.html#mne.write_evokeds).
 
 

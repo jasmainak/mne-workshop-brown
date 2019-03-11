@@ -23,10 +23,10 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 
 
 
-The :class:`Epochs <mne.Epochs>` data structure: epoched data
+The [`mne.Epochs`](https://martinos.org/mne/dev/generated/mne.Epochs.html) data structure: epoched data
 =============================================================
 
-:class:`Epochs <mne.Epochs>` objects are a way of representing continuous
+[`Epochs`](https://martinos.org/mne/dev/generated/mne.Epochs.html) objects are a way of representing continuous
 data as a collection of time-locked trials, stored in an array of shape
 ``(n_events, n_channels, n_times)``. They are useful for many statistical
 methods in neuroscience, and make it easy to quickly overview what occurs
@@ -45,11 +45,11 @@ from matplotlib import pyplot as plt
 ```
 
 
-:class:`Epochs <mne.Epochs>` objects can be created in three ways:
- 1. From a :class:`Raw <mne.io.Raw>` object, along with event times
- 2. From an :class:`Epochs <mne.Epochs>` object that has been saved as a
+[`Epochs`](https://martinos.org/mne/dev/generated/mne.Epochs.html) objects can be created in three ways:
+ 1. From a [`Raw`](https://martinos.org/mne/stable/generated/mne.io.Raw.html) object, along with event times
+ 2. From an [`Epochs`](https://martinos.org/mne/dev/generated/mne.Epochs.html) object that has been saved as a
     `.fif` file
- 3. From scratch using :class:`EpochsArray <mne.EpochsArray>`. See
+ 3. From scratch using [`EpochsArray`](https://martinos.org/mne/dev/generated/mne.EpochsArray.html#mne.EpochsArray). See
     `tut_creating_data_structures`
 
 
@@ -297,8 +297,8 @@ for ep in epochs[:2]:
 ```
 
 You can manually remove epochs from the Epochs object by using
-:func:`epochs.drop(idx) <mne.Epochs.drop>`, or by using rejection or flat
-thresholds with :func:`epochs.drop_bad(reject, flat) <mne.Epochs.drop_bad>`.
+[`epochs.drop(idx)`](https://martinos.org/mne/stable/generated/mne.Epochs.html#mne.Epochs.drop), or by using rejection or flat
+thresholds with [`epochs.drop_bad(reject, flat)`](https://martinos.org/mne/stable/generated/mne.Epochs.html#mne.Epochs.drop_bad).
 You can also inspect the reason why epochs were dropped by looking at the
 list stored in ``epochs.drop_log`` or plot them with
 :func:`epochs.plot_drop_log() <mne.Epochs.plot_drop_log>`. The indices
