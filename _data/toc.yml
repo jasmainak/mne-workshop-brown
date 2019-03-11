@@ -40,7 +40,7 @@
 - divider: true
 
 # Add a header and sample content section
-- header: Demo textbook
+- header: Notebooks
 
 # A chapter w/ a collection of sections beneath it
 - title: Raw to evoked
