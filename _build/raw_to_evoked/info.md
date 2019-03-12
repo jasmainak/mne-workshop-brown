@@ -23,10 +23,10 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 
 
 
-The :class:`Info <mne.Info>` data structure
+The [`Info`](https://martinos.org/mne/stable/generated/mne.Info.html) data structure
 ===========================================
 
-The :class:`Info <mne.Info>` data object is typically created
+The [`Info`](https://martinos.org/mne/stable/generated/mne.Info.html) data object is typically created
 when data is imported into MNE-Python and contains details such as:
 
 - date, subject information, and other recording details
@@ -35,7 +35,7 @@ when data is imported into MNE-Python and contains details such as:
 - digitized points
 - sensor–head coordinate transformation matrices
 
-and so forth. See the :class:`the API reference <mne.Info>`
+and so forth. See the [`the API reference`](https://martinos.org/mne/stable/generated/mne.Info.html)
 for a complete list of all data fields. Once created, this object is passed
 around throughout the data analysis pipeline.
 
@@ -50,7 +50,7 @@ import os.path as op
 ```
 
 
-:class:`mne.Info` behaves as a nested Python dictionary:
+[`mne.Info`](https://martinos.org/mne/stable/generated/mne.Info.html) behaves as a nested Python dictionary:
 
 
 
@@ -127,7 +127,7 @@ Obtaining subsets of channels
 -----------------------------
 
 There are a number of convenience functions to obtain channel indices, given
-an :class:`mne.Info` object.
+an [`mne.Info`](https://martinos.org/mne/stable/generated/mne.Info.html#mne.Info) object.
 
 
 
@@ -267,7 +267,7 @@ Dropping channels from an info structure
 ----------------------------------------
 
 It is possible to limit the info structure to only include a subset of
-channels with the :func:`mne.pick_info` function:
+channels with the [`mne.pick_info`](https://martinos.org/mne/stable/generated/mne.pick_info.html#mne.pick_info) function:
 
 
 

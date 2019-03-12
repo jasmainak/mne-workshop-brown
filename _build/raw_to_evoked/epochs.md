@@ -239,7 +239,7 @@ Tag-based selection without any matches raises a KeyError!
 
 ```
 
-It is also possible to iterate through :class:`Epochs <mne.Epochs>` objects
+It is also possible to iterate through [`Epochs`](https://martinos.org/mne/stable/generated/mne.Epochs.html#mne.Epochs) objects
 in this way. Note that behavior is different if you iterate on `Epochs`
 directly rather than indexing:
 
@@ -428,8 +428,8 @@ Created an SSP operator (subspace dimension = 3)
 
 If you wish to look at the average across trial types, then you may do so,
 creating an [`Evoked`](https://martinos.org/mne/dev/generated/mne.Evoked.html) object in the process. Instances
-of `Evoked` are usually created by calling :func:`mne.Epochs.average`. For
-creating `Evoked` from other data structures see :class:`mne.EvokedArray` and
+of `Evoked` are usually created by calling [`mne.Epochs.average`](https://martinos.org/mne/stable/generated/mne.Epochs.html#mne.Epochs.average). For
+creating `Evoked` from other data structures see [`mne.EvokedArray`](https://martinos.org/mne/stable/generated/mne.EvokedArray.html#mne.EvokedArray) and
 `tut_creating_data_structures`.
 
 
