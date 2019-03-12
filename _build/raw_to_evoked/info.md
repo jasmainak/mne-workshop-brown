@@ -322,3 +322,31 @@ print(reduced_info)
 >
 
 ```
+
+Exercises
+--------------
+
+1) Can you plot the EEG sensors in the info?
+
+
+
+{:.input_area}
+```python
+from mpl_toolkits.mplot3d import Axes3D
+
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+
+# your code here to compute x, y, z
+
+# ax.scatter(x, y, z)
+```
+
+
+
+{:.output .output_png}
+![png](../images/raw_to_evoked/info_29_0.png)
+
+
+
+In fact, you can use a convenient method `raw.plot_sensors` to just do this.
