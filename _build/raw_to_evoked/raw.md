@@ -13,11 +13,15 @@ next_page:
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
 
+First, we will set the backend for the plotting to be inline. This means that the plots will be interleaved with the text. This is very convenient for the tutorial. However, it lacks interactivity. If you would like to have interactivity, use one of the other options commented below. Note that, once you set the backend, you cannot change it unless you restart the kernel.
+
 
 
 {:.input_area}
 ```python
 %matplotlib inline
+# % matplotlib qt
+# % matplotlib notebook
 ```
 
 
@@ -130,7 +134,7 @@ _ = plt.title('Sample channels')
 
 
 {:.output .output_png}
-![png](../images/raw_to_evoked/raw_8_0.png)
+![png](../images/raw_to_evoked/raw_9_0.png)
 
 
 
@@ -192,7 +196,7 @@ del eeg, meg, meg_only, grad_only, eeg_only, data, specific_chans
 
 
 {:.output .output_png}
-![png](../images/raw_to_evoked/raw_12_0.png)
+![png](../images/raw_to_evoked/raw_13_0.png)
 
 
 
@@ -263,3 +267,49 @@ print('Time extends from', raw1.times.min(), 's to', raw1.times.max(), 's')
 Time extends from 0.0 s to 40.00399655463821 s
 
 ```
+
+Visualizing Raw data
+--------------------
+All of the plotting method names start with `plot`. If you’re using IPython console, you can just
+write `raw.plot` and ask the interpreter for suggestions with a tab key.
+
+To visually inspect your raw data, you can use:
+
+
+
+{:.input_area}
+```python
+raw.plot(block=True, lowpass=40);
+```
+
+
+
+{:.output .output_png}
+![png](../images/raw_to_evoked/raw_21_0.png)
+
+
+
+The channels are color coded by channel type. Generally MEG channels are colored in different shades of blue, whereas EEG channels are black. The scrollbar on right side of the browser window also tells us that two of the channels are marked as `bad`. Bad channels are color coded gray. By clicking the lines or channel names on the left, you can mark or unmark a bad channel interactively. You can use +/- keys to adjust the scale (also = works for magnifying the data). Note that the initial scaling factors can be set with parameter `scalings`. If you don’t know the scaling factor for channels, you can automatically set them by passing scalings=’auto’. With `pageup/pagedown` and `home/end` keys you can adjust the amount of data viewed at once.
+
+Exercises
+--------------
+
+1) Quite often the EOG channel is not marked correctly in the raw data. You may need to rename it. Can you figure out how to do this?
+
+
+
+{:.input_area}
+```python
+# your code here
+```
+
+
+2) How will you check that at least one EEG channel exists in the data?
+
+
+
+{:.input_area}
+```python
+# your code here
+```
+
