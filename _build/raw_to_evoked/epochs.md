@@ -83,7 +83,7 @@ event_id = {'Auditory/Left': 1, 'Auditory/Right': 2}
 
 {:.output .output_stream}
 ```
-Opening raw data file /home/mainak/Desktop/projects/github_repos/mne-python/examples/MNE-sample-data/MEG/sample/sample_audvis_raw.fif...
+Opening raw data file /local_mount/space/meghnn/1/users/mjas/mne_data/MNE-sample-data/MEG/sample/sample_audvis_raw.fif...
     Read a total of 3 projection items:
         PCA-v1 (1 x 102)  idle
         PCA-v2 (1 x 102)  idle
@@ -407,7 +407,7 @@ epochs = mne.read_epochs(epochs_fname, preload=False)
 
 {:.output .output_stream}
 ```
-Reading /home/mainak/Desktop/projects/github_repos/mne-python/examples/MNE-sample-data/MEG/sample/sample-epo.fif ...
+Reading /local_mount/space/meghnn/1/users/mjas/mne_data/MNE-sample-data/MEG/sample/sample-epo.fif ...
     Read a total of 3 projection items:
         PCA-v1 (1 x 102) active
         PCA-v2 (1 x 102) active
@@ -415,9 +415,6 @@ Reading /home/mainak/Desktop/projects/github_repos/mne-python/examples/MNE-sampl
     Found the data of interest:
         t =     -99.90 ...    1000.64 ms
         0 CTF compensation matrices available
-121 matching events found
-Applying baseline correction (mode: mean)
-Created an SSP operator (subspace dimension = 3)
 121 matching events found
 Applying baseline correction (mode: mean)
 Not setting metadata

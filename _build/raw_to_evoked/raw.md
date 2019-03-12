@@ -13,6 +13,9 @@ next_page:
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
 
+Backends
+---------------
+
 First, we will set the backend for the plotting to be inline. This means that the plots will be interleaved with the text. This is very convenient for the tutorial. However, it lacks interactivity. If you would like to have interactivity, use one of the other options commented below. Note that, once you set the backend, you cannot change it unless you restart the kernel.
 
 
@@ -34,22 +37,12 @@ Continuous data is stored in objects of type [Raw](https://martinos.org/mne/stab
 The core data structure is simply a 2D numpy array (channels × samples)
 (in memory or loaded on demand) combined with an
 [Info](https://martinos.org/mne/stable/generated/mne.Info.html#mne.Info) object (`.info` attribute)
-(see `tut_info_objects`).
+(see [The Info data structure](https://martinos.org/mne/stable/auto_tutorials/plot_info.html#tut-info-objects)).
 
 The most common way to load continuous data is from a .fif file. For more
-information on `loading data from other formats <ch_convert>`, or
-creating it `from scratch <tut_creating_data_structures>`.
+information on [loading data from other formats](https://martinos.org/mne/stable/manual/io.html#ch-convert), or
+creating it [from scratch](https://martinos.org/mne/stable/auto_tutorials/plot_creating_data_structures.html#tut-creating-data-structures).
 
-
-
-
-
-{:.input_area}
-```python
-import mne
-import os.path as op
-from matplotlib import pyplot as plt
-```
 
 
 Loading continuous data
@@ -63,21 +56,26 @@ Load an example dataset, the preload flag loads the data into memory now:
 
 {:.input_area}
 ```python
+import mne
+import os.path as op
+from matplotlib import pyplot as plt
+```
+
+
+
+
+{:.input_area}
+```python
 data_path = op.join(mne.datasets.sample.data_path(), 'MEG',
                     'sample', 'sample_audvis_raw.fif')
 raw = mne.io.read_raw_fif(data_path, preload=True)
 raw.set_eeg_reference('average', projection=True)  # set EEG average reference
-
-# Give the sample rate
-print('sample rate:', raw.info['sfreq'], 'Hz')
-# Give the size of the data matrix
-print('%s channels x %s samples' % (len(raw), len(raw.times)))
 ```
 
 
 {:.output .output_stream}
 ```
-Opening raw data file /home/mainak/Desktop/projects/github_repos/mne-python/examples/MNE-sample-data/MEG/sample/sample_audvis_raw.fif...
+Opening raw data file /local_mount/space/meghnn/1/users/mjas/mne_data/MNE-sample-data/MEG/sample/sample_audvis_raw.fif...
     Read a total of 3 projection items:
         PCA-v1 (1 x 102)  idle
         PCA-v2 (1 x 102)  idle
@@ -89,6 +87,32 @@ Reading 0 ... 166799  =      0.000 ...   277.714 secs...
 Adding average EEG reference projection.
 1 projection items deactivated
 Average reference projection was added, but has not been applied yet. Use the apply_proj method to apply it.
+
+```
+
+
+
+
+{:.output .output_data_text}
+```
+<Raw  |  sample_audvis_raw.fif, n_channels x n_times : 376 x 166800 (277.7 sec), ~482.1 MB, data loaded>
+```
+
+
+
+
+
+{:.input_area}
+```python
+# Give the sample rate
+print('sample rate:', raw.info['sfreq'], 'Hz')
+# Give the size of the data matrix
+print('%s channels x %s samples' % (len(raw), len(raw.times)))
+```
+
+
+{:.output .output_stream}
+```
 sample rate: 600.614990234375 Hz
 166800 channels x 166800 samples
 
@@ -101,23 +125,25 @@ with an `_`. This suggests that you should **not** access this
 variable directly but rely on indexing syntax detailed just below.
 
 Information about the channels contained in the [Raw](https://martinos.org/mne/stable/generated/mne.io.Raw.html)
-object is contained in the https://martinos.org/mne/stable/generated/mne.Info.html#mne.Info attribute.
+object is contained in the [Info](https://martinos.org/mne/stable/generated/mne.Info.html#mne.Info) attribute.
 This is essentially a dictionary with a number of relevant fields (see
-`tut_info_objects`).
+[The Info data structure](https://martinos.org/mne/stable/auto_tutorials/plot_info.html#tut-info-objects)).
 
 
 
 Indexing data
 -------------
 
-To access the data stored within :class:`Raw <mne.io.Raw>` objects,
-it is possible to index the :class:`Raw <mne.io.Raw>` object.
+To access the data stored within [Raw]((https://martinos.org/mne/stable/generated/mne.io.Raw.html)) objects,
+it is possible to index the [Raw](https://martinos.org/mne/stable/generated/mne.io.Raw.html) object.
 
-Indexing a :class:`Raw <mne.io.Raw>` object will return two arrays: an array
-of times, as well as the data representing those timepoints. This works
-even if the data is not preloaded, in which case the data will be read from
-disk when indexing. The syntax is as follows:
-
+Indexing a [Raw](https://martinos.org/mne/stable/generated/mne.io.Raw.html) object will 
+return two arrays: 
+* an array of times, 
+* the data representing those timepoints. 
+    
+This works even if the data is _not preloaded_, in which case the data will be
+read from disk when indexing.
 
 
 
@@ -134,7 +160,7 @@ _ = plt.title('Sample channels')
 
 
 {:.output .output_png}
-![png](../images/raw_to_evoked/raw_9_0.png)
+![png](../images/raw_to_evoked/raw_11_0.png)
 
 
 
@@ -196,7 +222,7 @@ del eeg, meg, meg_only, grad_only, eeg_only, data, specific_chans
 
 
 {:.output .output_png}
-![png](../images/raw_to_evoked/raw_13_0.png)
+![png](../images/raw_to_evoked/raw_15_0.png)
 
 
 
@@ -251,7 +277,7 @@ Concatenating  [Raw](https://martinos.org/mne/stable/generated/mne.io.Raw.html) 
 
 {:.input_area}
 ```python
-# Create multiple :class:`Raw <mne.io.RawFIF>` objects
+# Create multiple Raw objects
 raw1 = raw.copy().crop(0, 10)
 raw2 = raw.copy().crop(10, 20)
 raw3 = raw.copy().crop(20, 40)
@@ -285,11 +311,18 @@ raw.plot(block=True, lowpass=40);
 
 
 {:.output .output_png}
-![png](../images/raw_to_evoked/raw_21_0.png)
+![png](../images/raw_to_evoked/raw_23_0.png)
 
 
 
-The channels are color coded by channel type. Generally MEG channels are colored in different shades of blue, whereas EEG channels are black. The scrollbar on right side of the browser window also tells us that two of the channels are marked as `bad`. Bad channels are color coded gray. By clicking the lines or channel names on the left, you can mark or unmark a bad channel interactively. You can use +/- keys to adjust the scale (also = works for magnifying the data). Note that the initial scaling factors can be set with parameter `scalings`. If you don’t know the scaling factor for channels, you can automatically set them by passing scalings=’auto’. With `pageup/pagedown` and `home/end` keys you can adjust the amount of data viewed at once.
+The channels are color coded by channel type. 
+* MEG = blue, EEG = black
+* Bad channels on scrollbar color coded gray. 
+* Clicking the lines or channel names on the left, to mark or unmark a bad channel interactively. 
+* +/- keys to adjust the scale (also = works for magnifying the data).
+* Initial scaling factors can be set with parameter `scalings`. 
+* If you don’t know the scaling factor for channels, you can automatically set them by passing scalings=’auto’. 
+* With `pageup/pagedown` and `home/end` keys you can adjust the amount of data viewed at once.
 
 Exercises
 --------------

@@ -181,8 +181,6 @@ Get channel indices by type
 
 
 
-
-
 {:.input_area}
 ```python
 channel_indices = mne.pick_types(info, meg=True)  # MEG only
@@ -332,6 +330,7 @@ Exercises
 
 {:.input_area}
 ```python
+import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
 fig = plt.figure()
@@ -345,7 +344,7 @@ ax = fig.add_subplot(111, projection='3d')
 
 
 {:.output .output_png}
-![png](../images/raw_to_evoked/info_29_0.png)
+![png](../images/raw_to_evoked/info_30_0.png)
 
 
 
