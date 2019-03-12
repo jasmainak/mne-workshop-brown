@@ -98,10 +98,10 @@ Unique event codes: [ 1  2  3  4  5 32]
 
 ```
 
-Now, we can create an :class:`mne.Epochs` object with the events we've
+Now, we can create an [`mne.Epochs`](https://martinos.org/mne/dev/generated/mne.Epochs.html) object with the events we've
 extracted. Note that epochs constructed in this manner will not have their
 data available until explicitly read into memory, which you can do with
-:func:`get_data <mne.Epochs.get_data>`. Alternatively, you can use
+[`get_data`](https://martinos.org/mne/dev/generated/mne.Epochs.html#mne.Epochs.get_data). Alternatively, you can use
 `preload=True`.
 
 Expose the raw data as epochs, cut from -0.1 s to 1.0 s relative to the event
@@ -134,8 +134,8 @@ Loading data for 145 events and 662 original time points ...
 
 ```
 
-Epochs behave similarly to :class:`mne.io.Raw` objects. They have an
-:class:`info <mne.Info>` attribute that has all of the same
+Epochs behave similarly to [`mne.io.Raw`](https://martinos.org/mne/dev/generated/mne.io.Raw.html#mne.io.Raw) objects. They have an
+[`info`](https://martinos.org/mne/dev/generated/mne.Info.html#mne.Info) attribute that has all of the same
 information, as well as a number of attributes unique to the events contained
 within the object.
 
@@ -301,7 +301,7 @@ You can manually remove epochs from the Epochs object by using
 thresholds with [`epochs.drop_bad(reject, flat)`](https://martinos.org/mne/stable/generated/mne.Epochs.html#mne.Epochs.drop_bad).
 You can also inspect the reason why epochs were dropped by looking at the
 list stored in ``epochs.drop_log`` or plot them with
-:func:`epochs.plot_drop_log() <mne.Epochs.plot_drop_log>`. The indices
+[`epochs.plot_drop_log()`](https://martinos.org/mne/stable/generated/mne.Epochs.html#mne.Epochs.plot_drop_log). The indices
 from the original set of events are stored in ``epochs.selection``.
 
 
@@ -391,8 +391,8 @@ epochs.save(epochs_fname)
 ```
 
 
-Later on you can read the epochs with :func:`mne.read_epochs`. For reading
-EEGLAB epochs files see :func:`mne.read_epochs_eeglab`. We can also use
+Later on you can read the epochs with [`mne.read_epochs`](https://martinos.org/mne/dev/generated/mne.read_epochs.html#mne.read_epochs). For reading
+EEGLAB epochs files see [`mne.read_epochs_eeglab`](https://martinos.org/mne/dev/generated/mne.read_epochs_eeglab.html#mne.read_epochs_eeglab). We can also use
 ``preload=False`` to save memory, loading the epochs from disk on demand.
 
 
@@ -427,7 +427,7 @@ Created an SSP operator (subspace dimension = 3)
 ```
 
 If you wish to look at the average across trial types, then you may do so,
-creating an :class:`Evoked <mne.Evoked>` object in the process. Instances
+creating an [`Evoked`](https://martinos.org/mne/dev/generated/mne.Evoked.html) object in the process. Instances
 of `Evoked` are usually created by calling :func:`mne.Epochs.average`. For
 creating `Evoked` from other data structures see :class:`mne.EvokedArray` and
 `tut_creating_data_structures`.

@@ -10,18 +10,21 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 ---
 # Introduction to MNE-Python
 
-Here's a brief overview of what's coming up:
+Each day is a 1.5 to 2 hours hands-on introduction
+to MNE-Python.
 
-Week 1: Raw to evoked
---------------------- 
+Here's a brief break-down of what's coming up:
+
+Day 1: Raw to evoked
+--------------------
 
 We will be going from unprocessed continuous data (raw)
 to epochs to averaged evoked data. At each
 stage, the metadata associated with the recording
 can be accessed using an `info` object.
 
-Week 2: Preprocessing
----------------------
+Day 2: Preprocessing
+--------------------
 
 _Temporal filtering_: The most basic preprocessing is temporal filtering.
 This can remove line noise and high-frequency content.
@@ -36,8 +39,8 @@ spatial signatures. They can be removed using
 Signal Space Projection (SSP) or Independant Component
 Analysis (ICA).
 
-Week 3: Source modeling
------------------------
+Day 3: Source modeling
+----------------------
 
 The covariance estimation is needed to take into account
 the correlated noise in the sensors.
@@ -54,3 +57,16 @@ cortical surface
 
 Finally, an inverse operator can be computed and the source
 estimation performed.
+
+Buttons
+-------
+
+At the top of each notebook, there are two buttons labeled
+"Download" and "Interact".
+
+The download button allows you to
+save it to disk and run it on your computer. The interact
+button is a link to a mybinder instance, so you can play
+around with the code in the browser without having to install
+anything. Note that it may take a while to load -- sometimes
+4 to 5 minutes.
