@@ -75,7 +75,7 @@ raw.set_eeg_reference('average', projection=True)  # set EEG average reference
 
 {:.output .output_stream}
 ```
-Opening raw data file /local_mount/space/meghnn/1/users/mjas/mne_data/MNE-sample-data/MEG/sample/sample_audvis_raw.fif...
+Opening raw data file /home/mainak/Desktop/projects/github_repos/mne-python/examples/MNE-sample-data/MEG/sample/sample_audvis_raw.fif...
     Read a total of 3 projection items:
         PCA-v1 (1 x 102)  idle
         PCA-v2 (1 x 102)  idle

@@ -23,16 +23,30 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 
 
 
-The [`mne.Epochs`](https://martinos.org/mne/dev/generated/mne.Epochs.html) data structure: epoched data
+The [mne.Epochs](https://martinos.org/mne/dev/generated/mne.Epochs.html) data structure: epoched data
 =============================================================
 
-[`Epochs`](https://martinos.org/mne/dev/generated/mne.Epochs.html) objects are a way of representing continuous
+[Epochs](https://martinos.org/mne/dev/generated/mne.Epochs.html) objects are a way of representing continuous
 data as a collection of time-locked trials, stored in an array of shape
 ``(n_events, n_channels, n_times)``. They are useful for many statistical
 methods in neuroscience, and make it easy to quickly overview what occurs
 during a trial.
 
 
+
+Creating epochs
+------------------------
+
+[Epochs](https://martinos.org/mne/dev/generated/mne.Epochs.html) objects can be created in three ways:
+ 1. From a [Raw](https://martinos.org/mne/stable/generated/mne.io.Raw.html) object, along with event times
+ 2. From an [Epochs](https://martinos.org/mne/dev/generated/mne.Epochs.html) object that has been saved as a
+    `.fif` file
+ 3. From scratch using [EpochsArray](https://martinos.org/mne/dev/generated/mne.EpochsArray.html#mne.EpochsArray). See
+    [Creating MNE's data structures from scratch](https://martinos.org/mne/stable/auto_tutorials/plot_creating_data_structures.html#tut-creating-data-structures)
+
+
+
+Import packages
 
 
 
@@ -45,14 +59,7 @@ from matplotlib import pyplot as plt
 ```
 
 
-[`Epochs`](https://martinos.org/mne/dev/generated/mne.Epochs.html) objects can be created in three ways:
- 1. From a [`Raw`](https://martinos.org/mne/stable/generated/mne.io.Raw.html) object, along with event times
- 2. From an [`Epochs`](https://martinos.org/mne/dev/generated/mne.Epochs.html) object that has been saved as a
-    `.fif` file
- 3. From scratch using [`EpochsArray`](https://martinos.org/mne/dev/generated/mne.EpochsArray.html#mne.EpochsArray). See
-    `tut_creating_data_structures`
-
-
+Then, we will load the data
 
 
 
@@ -62,7 +69,29 @@ data_path = mne.datasets.sample.data_path()
 # Load a dataset that contains events
 raw = mne.io.read_raw_fif(
     op.join(data_path, 'MEG', 'sample', 'sample_audvis_raw.fif'))
+```
 
+
+{:.output .output_stream}
+```
+Opening raw data file /home/mainak/Desktop/projects/github_repos/mne-python/examples/MNE-sample-data/MEG/sample/sample_audvis_raw.fif...
+    Read a total of 3 projection items:
+        PCA-v1 (1 x 102)  idle
+        PCA-v2 (1 x 102)  idle
+        PCA-v3 (1 x 102)  idle
+    Range : 25800 ... 192599 =     42.956 ...   320.670 secs
+Ready.
+Current compensation grade : 0
+
+```
+
+Extract events
+--------------
+
+
+
+{:.input_area}
+```python
 # If your raw object has a stim channel, you can construct an event array
 # easily
 events = mne.find_events(raw, stim_channel='STI 014')
@@ -72,25 +101,11 @@ print('Number of events:', len(events))
 
 # Show all unique event codes (3rd column)
 print('Unique event codes:', np.unique(events[:, 2]))
-
-# Specify event codes of interest with descriptive labels.
-# This dataset also has visual left (3) and right (4) events, but
-# to save time and memory we'll just look at the auditory conditions
-# for now.
-event_id = {'Auditory/Left': 1, 'Auditory/Right': 2}
 ```
 
 
 {:.output .output_stream}
 ```
-Opening raw data file /local_mount/space/meghnn/1/users/mjas/mne_data/MNE-sample-data/MEG/sample/sample_audvis_raw.fif...
-    Read a total of 3 projection items:
-        PCA-v1 (1 x 102)  idle
-        PCA-v2 (1 x 102)  idle
-        PCA-v3 (1 x 102)  idle
-    Range : 25800 ... 192599 =     42.956 ...   320.670 secs
-Ready.
-Current compensation grade : 0
 320 events found
 Event IDs: [ 1  2  3  4  5 32]
 Number of events: 320
@@ -98,11 +113,18 @@ Unique event codes: [ 1  2  3  4  5 32]
 
 ```
 
-Now, we can create an [`mne.Epochs`](https://martinos.org/mne/dev/generated/mne.Epochs.html) object with the events we've
-extracted. Note that epochs constructed in this manner will not have their
-data available until explicitly read into memory, which you can do with
-[`get_data`](https://martinos.org/mne/dev/generated/mne.Epochs.html#mne.Epochs.get_data). Alternatively, you can use
-`preload=True`.
+Specify event codes of interest with descriptive labels.
+
+
+
+{:.input_area}
+```python
+# This dataset also has visual left (3) and right (4) events, but
+# to save time and memory we'll just look at the auditory conditions
+# for now.
+event_id = {'Auditory/Left': 1, 'Auditory/Right': 2}
+```
+
 
 Expose the raw data as epochs, cut from -0.1 s to 1.0 s relative to the event
 onsets
@@ -134,6 +156,11 @@ Loading data for 145 events and 662 original time points ...
 
 ```
 
+Note that epochs constructed in this manner will not have their
+data available until explicitly read into memory, which you can do with
+[get_data](https://martinos.org/mne/dev/generated/mne.Epochs.html#mne.Epochs.get_data). Alternatively, you can use
+`preload=True`.
+
 Epochs behave similarly to [`mne.io.Raw`](https://martinos.org/mne/dev/generated/mne.io.Raw.html#mne.io.Raw) objects. They have an
 [`info`](https://martinos.org/mne/dev/generated/mne.Info.html#mne.Info) attribute that has all of the same
 information, as well as a number of attributes unique to the events contained
@@ -159,10 +186,12 @@ print(epochs.event_id)
 
 ```
 
-You can select subsets of epochs by indexing the :class:`Epochs <mne.Epochs>`
+Indexing epochs
+------------------------
+
+You can select subsets of epochs by indexing the [Epochs](https://martinos.org/mne/dev/generated/mne.Epochs.html) 
 object directly. Alternatively, if you have epoch names specified in
 `event_id` then you may index with strings instead.
-
 
 
 
@@ -296,15 +325,11 @@ for ep in epochs[:2]:
 
 ```
 
-You can manually remove epochs from the Epochs object by using
-[`epochs.drop(idx)`](https://martinos.org/mne/stable/generated/mne.Epochs.html#mne.Epochs.drop), or by using rejection or flat
-thresholds with [`epochs.drop_bad(reject, flat)`](https://martinos.org/mne/stable/generated/mne.Epochs.html#mne.Epochs.drop_bad).
-You can also inspect the reason why epochs were dropped by looking at the
-list stored in ``epochs.drop_log`` or plot them with
-[`epochs.plot_drop_log()`](https://martinos.org/mne/stable/generated/mne.Epochs.html#mne.Epochs.plot_drop_log). The indices
-from the original set of events are stored in ``epochs.selection``.
+Dropping epochs
+-------------------------
 
-
+* Manually by using [epochs.drop(idx)](https://martinos.org/mne/stable/generated/mne.Epochs.html#mne.Epochs.drop), 
+* Using rejection or flat thresholds with [epochs.drop_bad(reject, flat)](https://martinos.org/mne/stable/generated/mne.Epochs.html#mne.Epochs.drop_bad).
 
 
 
@@ -312,13 +337,6 @@ from the original set of events are stored in ``epochs.selection``.
 ```python
 epochs.drop([0], reason='User reason')
 epochs.drop_bad(reject=dict(grad=2500e-13, mag=4e-12, eog=200e-6), flat=None)
-print(epochs.drop_log)
-epochs.plot_drop_log()
-print('Selection from original events:\n%s' % epochs.selection)
-print('Removed events (from numpy setdiff1d):\n%s'
-      % (np.setdiff1d(np.arange(len(events)), epochs.selection).tolist(),))
-print('Removed events (from list comprehension -- should match!):\n%s'
-      % ([li for li, log in enumerate(epochs.drop_log) if len(log) > 0]))
 ```
 
 
@@ -349,35 +367,52 @@ Dropped 1 epoch
     Rejecting  epoch based on EOG : ['EOG 061']
     Rejecting  epoch based on EOG : ['EOG 061']
 23 bad epochs dropped
+
+```
+
+
+
+
+{:.output .output_data_text}
+```
+<Epochs  |   121 events (all good), -0.0998976 - 1.00064 sec, baseline [None, 0], ~233.4 MB, data loaded,
+ 'Auditory/Left': 57
+ 'Auditory/Right': 64>
+```
+
+
+
+You can also inspect the reason why epochs were dropped by looking at the
+list stored in ``epochs.drop_log`` or plot them with
+[epochs.plot_drop_log()](https://martinos.org/mne/stable/generated/mne.Epochs.html#mne.Epochs.plot_drop_log). The indices
+from the original set of events are stored in ``epochs.selection``.
+
+
+
+{:.input_area}
+```python
+print(epochs.drop_log)
+epochs.plot_drop_log();
+```
+
+
+{:.output .output_stream}
+```
 [['User reason'], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], ['EOG 061'], ['IGNORED'], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], ['IGNORED'], [], ['IGNORED'], ['EOG 061'], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], ['IGNORED'], ['EOG 061'], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], ['IGNORED'], ['IGNORED'], ['IGNORED'], ['EOG 061'], ['IGNORED'], ['EOG 061'], ['IGNORED'], ['EOG 061'], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], ['IGNORED'], ['IGNORED'], ['IGNORED'], [], ['IGNORED'], ['MEG 1711'], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], ['IGNORED'], [], ['IGNORED'], ['EOG 061'], ['IGNORED'], ['EOG 061'], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], ['IGNORED'], ['IGNORED'], ['IGNORED'], ['EOG 061'], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], ['MEG 1711'], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], ['EOG 061'], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], ['IGNORED'], ['EOG 061'], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], ['EOG 061'], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], ['IGNORED'], ['IGNORED'], ['IGNORED'], [], ['IGNORED'], ['MEG 1421', 'EOG 061'], ['IGNORED'], ['EOG 061'], ['IGNORED'], ['EOG 061'], ['IGNORED'], [], ['IGNORED'], ['EOG 061'], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], ['IGNORED'], ['IGNORED'], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], ['MEG 1421', 'EOG 061'], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], ['IGNORED'], ['IGNORED'], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], ['EOG 061'], ['IGNORED'], ['EOG 061'], ['IGNORED'], ['EOG 061'], ['IGNORED'], [], ['IGNORED'], ['EOG 061'], ['IGNORED'], [], ['IGNORED'], ['IGNORED'], ['IGNORED'], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], [], ['IGNORED'], ['IGNORED']]
 
 ```
 
 
 {:.output .output_png}
-![png](../images/raw_to_evoked/epochs_18_1.png)
+![png](../images/raw_to_evoked/epochs_28_1.png)
 
 
 
-{:.output .output_stream}
-```
-Selection from original events:
-[  2   4   6   8  10  12  14  19  21  23  25  27  29  31  33  35  38  42
-  44  46  48  50  52  54  56  58  63  65  67  69  71  73  75  77  88  90
-  92  94  96  98 101 103 105 107 109 111 113 115 117 122 126 128 130 132
- 134 136 138 140 142 145 151 153 155 157 159 161 168 170 174 176 178 182
- 184 189 191 193 197 199 201 206 214 218 220 222 224 229 231 233 235 237
- 239 241 243 245 248 250 252 254 256 258 262 264 269 271 273 281 285 290
- 292 294 296 298 300 302 304 306 308 310 313 315 317]
-Removed events (from numpy setdiff1d):
-[0, 1, 3, 5, 7, 9, 11, 13, 15, 16, 17, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 37, 39, 40, 41, 43, 45, 47, 49, 51, 53, 55, 57, 59, 60, 61, 62, 64, 66, 68, 70, 72, 74, 76, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 89, 91, 93, 95, 97, 99, 100, 102, 104, 106, 108, 110, 112, 114, 116, 118, 119, 120, 121, 123, 124, 125, 127, 129, 131, 133, 135, 137, 139, 141, 143, 144, 146, 147, 148, 149, 150, 152, 154, 156, 158, 160, 162, 163, 164, 165, 166, 167, 169, 171, 172, 173, 175, 177, 179, 180, 181, 183, 185, 186, 187, 188, 190, 192, 194, 195, 196, 198, 200, 202, 203, 204, 205, 207, 208, 209, 210, 211, 212, 213, 215, 216, 217, 219, 221, 223, 225, 226, 227, 228, 230, 232, 234, 236, 238, 240, 242, 244, 246, 247, 249, 251, 253, 255, 257, 259, 260, 261, 263, 265, 266, 267, 268, 270, 272, 274, 275, 276, 277, 278, 279, 280, 282, 283, 284, 286, 287, 288, 289, 291, 293, 295, 297, 299, 301, 303, 305, 307, 309, 311, 312, 314, 316, 318, 319]
-Removed events (from list comprehension -- should match!):
-[0, 1, 3, 5, 7, 9, 11, 13, 15, 16, 17, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 37, 39, 40, 41, 43, 45, 47, 49, 51, 53, 55, 57, 59, 60, 61, 62, 64, 66, 68, 70, 72, 74, 76, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 89, 91, 93, 95, 97, 99, 100, 102, 104, 106, 108, 110, 112, 114, 116, 118, 119, 120, 121, 123, 124, 125, 127, 129, 131, 133, 135, 137, 139, 141, 143, 144, 146, 147, 148, 149, 150, 152, 154, 156, 158, 160, 162, 163, 164, 165, 166, 167, 169, 171, 172, 173, 175, 177, 179, 180, 181, 183, 185, 186, 187, 188, 190, 192, 194, 195, 196, 198, 200, 202, 203, 204, 205, 207, 208, 209, 210, 211, 212, 213, 215, 216, 217, 219, 221, 223, 225, 226, 227, 228, 230, 232, 234, 236, 238, 240, 242, 244, 246, 247, 249, 251, 253, 255, 257, 259, 260, 261, 263, 265, 266, 267, 268, 270, 272, 274, 275, 276, 277, 278, 279, 280, 282, 283, 284, 286, 287, 288, 289, 291, 293, 295, 297, 299, 301, 303, 305, 307, 309, 311, 312, 314, 316, 318, 319]
-
-```
+Input/Output
+------------------
 
 If you wish to save the epochs as a file, you can do it with
-:func:`mne.Epochs.save`. To conform to MNE naming conventions, the
+[mne.Epochs.save](https://martinos.org/mne/stable/generated/mne.Epochs.html#mne.Epochs.save). To conform to MNE naming conventions, the
 epochs file names should end with '-epo.fif'.
 
 
@@ -407,7 +442,7 @@ epochs = mne.read_epochs(epochs_fname, preload=False)
 
 {:.output .output_stream}
 ```
-Reading /local_mount/space/meghnn/1/users/mjas/mne_data/MNE-sample-data/MEG/sample/sample-epo.fif ...
+Reading /home/mainak/Desktop/projects/github_repos/mne-python/examples/MNE-sample-data/MEG/sample/sample-epo.fif ...
     Read a total of 3 projection items:
         PCA-v1 (1 x 102) active
         PCA-v2 (1 x 102) active
@@ -415,6 +450,9 @@ Reading /local_mount/space/meghnn/1/users/mjas/mne_data/MNE-sample-data/MEG/samp
     Found the data of interest:
         t =     -99.90 ...    1000.64 ms
         0 CTF compensation matrices available
+121 matching events found
+Applying baseline correction (mode: mean)
+Created an SSP operator (subspace dimension = 3)
 121 matching events found
 Applying baseline correction (mode: mean)
 Not setting metadata
@@ -425,9 +463,7 @@ Created an SSP operator (subspace dimension = 3)
 
 If you wish to look at the average across trial types, then you may do so,
 creating an [`Evoked`](https://martinos.org/mne/dev/generated/mne.Evoked.html) object in the process. Instances
-of `Evoked` are usually created by calling [`mne.Epochs.average`](https://martinos.org/mne/stable/generated/mne.Epochs.html#mne.Epochs.average). For
-creating `Evoked` from other data structures see [`mne.EvokedArray`](https://martinos.org/mne/stable/generated/mne.EvokedArray.html#mne.EvokedArray) and
-`tut_creating_data_structures`.
+of `Evoked` are usually created by calling [`mne.Epochs.average`](https://martinos.org/mne/stable/generated/mne.Epochs.html#mne.Epochs.average).
 
 
 
@@ -448,13 +484,35 @@ plt.tight_layout()
 
 
 {:.output .output_png}
-![png](../images/raw_to_evoked/epochs_24_0.png)
+![png](../images/raw_to_evoked/epochs_34_0.png)
 
 
+
+For creating `Evoked` from other data structures see [mne.EvokedArray](https://martinos.org/mne/stable/generated/mne.EvokedArray.html#mne.EvokedArray) and [Creating MNE's data structures from scratch](https://martinos.org/mne/dev/auto_tutorials/plot_creating_data_structures.html#tut-creating-data-structures).
 
 To export and manipulate Epochs using Pandas see
-`sphx_glr_auto_tutorials_plot_epochs_to_data_frame.py`,
-or to work directly with metadata in MNE-Python see
-`sphx_glr_auto_tutorials_plot_metadata_epochs.py`.
+[Export epochs to pandas dataframe](https://martinos.org/mne/stable/auto_tutorials/plot_epochs_to_data_frame.html#sphx-glr-auto-tutorials-plot-epochs-to-data-frame-py),
+or to work directly with metadata in MNE-Python see [Pandas querying and metadata with Epochs objects](https://martinos.org/mne/stable/auto_tutorials/plot_metadata_epochs.html#sphx-glr-auto-tutorials-plot-metadata-epochs-py).
 
+Exercises
+--------------
+1) Can you find out the indices of the epochs that have been removed due to eyeblinks?
+
+
+
+{:.input_area}
+```python
+# your code here
+```
+
+
+2) Can you plot these epochs and verify that these do indeed contain eyeblinks?
+
+
+
+{:.input_area}
+```python
+# your code here
+# epochs_eyeblinks.average().plot(spatial_colors=True)
+```
 
