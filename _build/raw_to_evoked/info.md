@@ -41,6 +41,10 @@ around throughout the data analysis pipeline.
 
 
 
+[`mne.Info`](https://martinos.org/mne/stable/generated/mne.Info.html) behaves as a nested Python dictionary:
+
+
+
 
 
 {:.input_area}
@@ -48,10 +52,6 @@ around throughout the data analysis pipeline.
 import mne
 import os.path as op
 ```
-
-
-[`mne.Info`](https://martinos.org/mne/stable/generated/mne.Info.html) behaves as a nested Python dictionary:
-
 
 
 
@@ -84,24 +84,6 @@ Keys in info dictionary:
 
 ```
 
-Obtain the sampling rate of the data
-
-
-
-
-
-{:.input_area}
-```python
-print(info['sfreq'], 'Hz')
-```
-
-
-{:.output .output_stream}
-```
-600.614990234375 Hz
-
-```
-
 List all information about the first data channel
 
 
@@ -119,6 +101,24 @@ print(info['chs'][0])
 {'scanno': 1, 'logno': 113, 'kind': 1, 'range': 0.00030517578125, 'cal': 3.1600000394149674e-09, 'coil_type': 3012, 'loc': array([-0.1066    ,  0.0464    , -0.0604    , -0.0127    ,  0.0057    ,
        -0.99990302, -0.186801  , -0.98240298, -0.0033    , -0.98232698,
         0.18674099,  0.013541  ]), 'unit': 201, 'unit_mul': 0, 'ch_name': 'MEG 0113', 'coord_frame': 1}
+
+```
+
+Obtain the sampling rate of the data
+
+
+
+
+
+{:.input_area}
+```python
+print(info['sfreq'], 'Hz')
+```
+
+
+{:.output .output_stream}
+```
+600.614990234375 Hz
 
 ```
 
@@ -224,11 +224,12 @@ Obtaining information about channels
 
 
 
+Channel type of a specific channel
+
 
 
 {:.input_area}
 ```python
-# Channel type of a specific channel
 channel_type = mne.io.pick.channel_type(info, 75)
 print('Channel #75 is of type:', channel_type)
 ```
@@ -344,8 +345,40 @@ ax = fig.add_subplot(111, projection='3d')
 
 
 {:.output .output_png}
-![png](../images/raw_to_evoked/info_30_0.png)
+![png](../images/raw_to_evoked/info_31_0.png)
 
 
 
 In fact, you can use a convenient method `raw.plot_sensors` to just do this.
+
+
+
+{:.input_area}
+```python
+# % matplotlib notebook
+data_path = op.join(mne.datasets.sample.data_path(), 'MEG',
+                    'sample', 'sample_audvis_raw.fif')
+raw = mne.io.read_raw_fif(data_path, preload=True).pick_types(eeg=True, meg=False)
+raw.plot_sensors(kind='3d');
+```
+
+
+{:.output .output_stream}
+```
+Opening raw data file /local_mount/space/meghnn/1/users/mjas/mne_data/MNE-sample-data/MEG/sample/sample_audvis_raw.fif...
+    Read a total of 3 projection items:
+        PCA-v1 (1 x 102)  idle
+        PCA-v2 (1 x 102)  idle
+        PCA-v3 (1 x 102)  idle
+    Range : 25800 ... 192599 =     42.956 ...   320.670 secs
+Ready.
+Current compensation grade : 0
+Reading 0 ... 166799  =      0.000 ...   277.714 secs...
+
+```
+
+
+{:.output .output_png}
+![png](../images/raw_to_evoked/info_33_1.png)
+
+

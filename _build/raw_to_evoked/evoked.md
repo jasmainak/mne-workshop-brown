@@ -59,7 +59,7 @@ print(evokeds)
 
 {:.output .output_stream}
 ```
-Reading /home/mainak/Desktop/projects/github_repos/mne-python/examples/MNE-sample-data/MEG/sample/sample_audvis-ave.fif ...
+Reading /local_mount/space/meghnn/1/users/mjas/mne_data/MNE-sample-data/MEG/sample/sample_audvis-ave.fif ...
     Read a total of 4 projection items:
         PCA-v1 (1 x 102) active
         PCA-v2 (1 x 102) active
@@ -128,7 +128,7 @@ print(evoked)
 
 {:.output .output_stream}
 ```
-Reading /home/mainak/Desktop/projects/github_repos/mne-python/examples/MNE-sample-data/MEG/sample/sample_audvis-ave.fif ...
+Reading /local_mount/space/meghnn/1/users/mjas/mne_data/MNE-sample-data/MEG/sample/sample_audvis-ave.fif ...
     Read a total of 4 projection items:
         PCA-v1 (1 x 102) active
         PCA-v2 (1 x 102) active
@@ -147,7 +147,7 @@ Projections have already been applied. Setting proj attribute to True.
 ```
 
 If you're gone through the tutorials of raw and epochs datasets, you're
-probably already familiar with the :class:`Info <mne.Info>` attribute.
+probably already familiar with the [Info](https://martinos.org/mne/stable/auto_tutorials/plot_info.html) attribute.
 There is nothing new or special with the ``evoked.info``. All the relevant
 info is still there.
 
@@ -463,22 +463,13 @@ the data and some info about the evoked data. For more information, see
 {:.input_area}
 ```python
 evoked = mne.EvokedArray(data, evoked.info, tmin=evoked.times[0])
-evoked.plot(time_unit='s')
+evoked.plot(time_unit='s');
 ```
 
 
 
 {:.output .output_png}
 ![png](../images/raw_to_evoked/evoked_16_0.png)
-
-
-
-
-
-
-{:.output .output_png}
-![png](../images/raw_to_evoked/evoked_16_1.png)
-
 
 
 
