@@ -1,10 +1,11 @@
 name: rise-environment
 channels:
-  - damianavila82
-  - conda-forge
+- damianavila82
+- conda-forge
 dependencies:
-  - numpy 
-  - scipy 
-  - matplotlib 
+- numpy
+- scipy
+- matplotlib
+- rise
+- pip:
   - mne
-  - rise
