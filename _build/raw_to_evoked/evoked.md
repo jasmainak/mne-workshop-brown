@@ -452,9 +452,9 @@ Data from channel MEG 0142:
 ```
 
 If you want to import evoked data from some other system and you have it in a
-numpy array you can use :class:`mne.EvokedArray` for that. All you need is
+numpy array you can use [mne.EvokedArray](https://martinos.org/mne/stable/generated/mne.EvokedArray.html) for that. All you need is
 the data and some info about the evoked data. For more information, see
-`tut_creating_data_structures`.
+[Creating MNE's data structures from scratch](https://martinos.org/mne/stable/auto_tutorials/plot_creating_data_structures.html#tut-creating-data-structures).
 
 
 

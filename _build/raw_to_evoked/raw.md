@@ -23,8 +23,8 @@ First, we will set the backend for the plotting to be inline. This means that th
 {:.input_area}
 ```python
 %matplotlib inline
-# % matplotlib qt
-# % matplotlib notebook
+# %matplotlib qt
+# %matplotlib notebook
 ```
 
 

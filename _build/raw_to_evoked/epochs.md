@@ -35,7 +35,7 @@ during a trial.
 
 
 Creating epochs
-------------------------
+=============
 
 [Epochs](https://martinos.org/mne/dev/generated/mne.Epochs.html) objects can be created in three ways:
  1. From a [Raw](https://martinos.org/mne/stable/generated/mne.io.Raw.html) object, along with event times
@@ -95,12 +95,6 @@ Extract events
 # If your raw object has a stim channel, you can construct an event array
 # easily
 events = mne.find_events(raw, stim_channel='STI 014')
-
-# Show the number of events (number of rows)
-print('Number of events:', len(events))
-
-# Show all unique event codes (3rd column)
-print('Unique event codes:', np.unique(events[:, 2]))
 ```
 
 
@@ -108,10 +102,44 @@ print('Unique event codes:', np.unique(events[:, 2]))
 ```
 320 events found
 Event IDs: [ 1  2  3  4  5 32]
-Number of events: 320
-Unique event codes: [ 1  2  3  4  5 32]
 
 ```
+
+Look at the first 5 events (onset, value before event, event id):
+
+
+
+{:.input_area}
+```python
+print(events[:5])
+```
+
+
+{:.output .output_stream}
+```
+[[27977     0     2]
+ [28345     0     3]
+ [28771     0     1]
+ [29219     0     4]
+ [29652     0     2]]
+
+```
+
+We can plot the events
+
+
+
+{:.input_area}
+```python
+mne.viz.plot_events(events, sfreq=raw.info['sfreq']);
+```
+
+
+
+{:.output .output_png}
+![png](../images/raw_to_evoked/epochs_12_0.png)
+
+
 
 Specify event codes of interest with descriptive labels.
 
@@ -187,7 +215,7 @@ print(epochs.event_id)
 ```
 
 Indexing epochs
-------------------------
+=============
 
 You can select subsets of epochs by indexing the [Epochs](https://martinos.org/mne/dev/generated/mne.Epochs.html) 
 object directly. Alternatively, if you have epoch names specified in
@@ -404,7 +432,7 @@ epochs.plot_drop_log();
 
 
 {:.output .output_png}
-![png](../images/raw_to_evoked/epochs_28_1.png)
+![png](../images/raw_to_evoked/epochs_32_1.png)
 
 
 
@@ -481,7 +509,7 @@ plt.tight_layout()
 
 
 {:.output .output_png}
-![png](../images/raw_to_evoked/epochs_34_0.png)
+![png](../images/raw_to_evoked/epochs_38_0.png)
 
 
 
@@ -499,17 +527,47 @@ Exercises
 
 {:.input_area}
 ```python
+epochs = mne.read_epochs(epochs_fname, preload=False)
 # your code here
+# print(idxs)
 ```
 
 
-2) Can you plot these epochs and verify that these do indeed contain eyeblinks?
+{:.output .output_stream}
+```
+Reading /local_mount/space/meghnn/1/users/mjas/mne_data/MNE-sample-data/MEG/sample/sample-epo.fif ...
+    Read a total of 3 projection items:
+        PCA-v1 (1 x 102) active
+        PCA-v2 (1 x 102) active
+        PCA-v3 (1 x 102) active
+    Found the data of interest:
+        t =     -99.90 ...    1000.64 ms
+        0 CTF compensation matrices available
+121 matching events found
+Applying baseline correction (mode: mean)
+Not setting metadata
+Created an SSP operator (subspace dimension = 3)
+3 projection items activated
+
+```
+
+2) Can you find the indices of channels corresponding to `EOG 061`?
 
 
 
 {:.input_area}
 ```python
 # your code here
-# epochs_eyeblinks.average().plot(spatial_colors=True)
+# print(epochs.info['ch_names'][picks])
+```
+
+
+2) Can you plot the EOG channel for these epochs and verify that these do indeed contain eyeblinks?
+
+
+
+{:.input_area}
+```python
+# your code here
 ```
 
