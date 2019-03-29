@@ -29,3 +29,11 @@ serve:
 site:
 	bundle exec jekyll build
 	touch _site/.nojekyll
+
+copypush:
+	git clone -b master --single-branch --no-checkout --depth 1 git@github.com:jasmainak/mne-workshop-brown.git content_master/
+	cp -r content/* content_master && \
+	cd content_master && \
+	git add * && \
+	git commit -a -m 'Copy from gh-pages' && \
+	git push
