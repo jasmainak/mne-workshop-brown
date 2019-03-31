@@ -23,7 +23,11 @@
 
 # Top-level page
 - title: Home
-  url: /index
+  url: /readme
+  not_numbered: true
+
+- title: Overview
+  url: /overview
   not_numbered: true
 
 # External link
