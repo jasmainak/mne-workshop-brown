@@ -5,7 +5,7 @@ interact_link: content/raw_to_evoked/raw.ipynb
 kernel_name: python3
 title: 'Raw data'
 prev_page:
-  url: /raw_to_evoked/intro
+  url: /raw_to_evoked/readme
   title: 'Raw to evoked'
 next_page:
   url: /raw_to_evoked/epochs

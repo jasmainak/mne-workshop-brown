@@ -3,7 +3,7 @@ redirect_from:
   - "/evoked-to-stc/cov"
 title: 'Covariance'
 prev_page:
-  url: /evoked_to_stc/intro
+  url: /evoked_to_stc/readme
   title: 'Evoked to source space'
 next_page:
   url: /evoked_to_stc/forward

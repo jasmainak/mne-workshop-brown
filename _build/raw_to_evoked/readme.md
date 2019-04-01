@@ -3,8 +3,8 @@ redirect_from:
   - "/raw-to-evoked/readme"
 title: 'Raw to evoked'
 prev_page:
-  url: /https://martinos.org/mne/stable/install_mne_python.html
-  title: 'Install MNE'
+  url: /https://github.com/jasmainak/mne-workshop-brown/archive/master.zip
+  title: 'Download all notebooks'
 next_page:
   url: /raw_to_evoked/raw
   title: 'Raw data'

@@ -21,13 +21,8 @@
 #
 # See the links below for an example.
 
-# Top-level page
-- title: Home
-  url: /readme
-  not_numbered: true
-
 - title: Overview
-  url: /overview
+  url: /readme
   not_numbered: true
 
 # External link
@@ -46,9 +41,14 @@
 # Add a header and sample content section
 - header: Notebooks
 
+- title: Download all notebooks
+  url: https://github.com/jasmainak/mne-workshop-brown/archive/master.zip
+  external: true
+  not_numbered: true
+
 # A chapter w/ a collection of sections beneath it
 - title: Raw to evoked
-  url: /raw_to_evoked/intro
+  url: /raw_to_evoked/readme
   not_numbered: true
   expand_sections: true
   sections:
@@ -65,7 +65,7 @@
     url: /raw_to_evoked/info
     not_numbered: true
 - title: Preprocessing
-  url: /preprocessing/intro
+  url: /preprocessing/readme
   not_numbered: true
   expand_sections: true
   sections:
@@ -82,7 +82,7 @@
     url: /preprocessing/ica
     not_numbered: true
 - title: Evoked to source space
-  url: /evoked_to_stc/intro
+  url: /evoked_to_stc/readme
   not_numbered: true
   expand_sections: true
   sections:

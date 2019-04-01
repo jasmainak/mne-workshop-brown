@@ -1,7 +1,7 @@
 ---
 title: 'Filtering'
 prev_page:
-  url: /preprocessing/intro
+  url: /preprocessing/readme
   title: 'Preprocessing'
 next_page:
   url: /preprocessing/autoreject
