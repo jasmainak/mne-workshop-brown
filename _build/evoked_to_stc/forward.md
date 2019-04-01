@@ -3,6 +3,7 @@ redirect_from:
   - "/evoked-to-stc/forward"
 interact_link: content/evoked_to_stc/forward.ipynb
 kernel_name: python3
+has_widgets: false
 title: 'Forward model'
 prev_page:
   url: /evoked_to_stc/cov
@@ -13,38 +14,15 @@ next_page:
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
 
-# Create a forward operator and display sensitivity maps
+# Forward computation
 
-`
-Authors: Eric Larson <larson.eric.d@gmail.com>
-         Denis Engemann <denis.engemann@gmail.com>
-         Alex Gramfort <alexandre.gramfort@telecom-paristech.fr>
-`
+To compute source estimates, one typically assumes:
+    
+$$M = GX + E$$
 
-License: BSD (3-clause)
+where $M \in \mathbb{R}^{C \times T}$ is the sensor data, $G \in \mathbb{R}^{C \times S}$ is the lead-field matrix, $X \in \mathbb{R}^{S \times T}$ is the source time course (stc) and $E \in \mathbb{R}^{C \times T}$ is additive Gaussian noise
 
-First setup some paths. We will use the MNE sample data.
-
-
-
-{:.input_area}
-```python
-import mne
-from mne.datasets import sample
-data_path = sample.data_path()
-
-# data_path = '/Users/alex/mne_data/MNE-sample-data'
-
-# the raw file containing the channel location + types
-raw_fname = data_path + '/MEG/sample/sample_audvis_raw.fif'
-# The transformation file obtained by coregistration
-trans = data_path + '/MEG/sample/sample_audvis_raw-trans.fif'
-# Name of the forward to read (precomputed) or compute
-fwd_fname = data_path + '/MEG/sample/sample_audvis-meg-eeg-oct-6-fwd.fif'
-# The paths to freesurfer reconstructions
-subjects_dir = data_path + '/subjects'
-```
-
+The lead-field matrix or forward operator $G$ is computed using the physics of the problem. It is what we will focus on here
 
 
 
@@ -59,17 +37,37 @@ from mayavi import mlab
 
 To compute a forward operator we need:
 
+   - the BEM surfaces
    - a -trans.fif file that contains the coregistration info
    - a source space
-   - the BEM surfaces
+
+
+
+{:.input_area}
+```python
+import mne
+from mne.datasets import sample
+
+data_path = sample.data_path()
+
+# the raw file containing the channel location + types
+raw_fname = data_path + '/MEG/sample/sample_audvis_raw.fif'
+
+# The transformation file obtained by coregistration
+trans = data_path + '/MEG/sample/sample_audvis_raw-trans.fif'
+# Name of the forward to read (precomputed) or compute
+fwd_fname = data_path + '/MEG/sample/sample_audvis-meg-eeg-oct-6-fwd.fif'
+# The paths to freesurfer reconstructions
+subjects_dir = data_path + '/subjects'
+```
+
 
 ## Compute and visualize BEM surfaces
 
 Computing the BEM surfaces requires FreeSurfer and makes use of either of the two following command line tools:
 
-[mne watershed_bem](http://martinos.org/mne/dev/generated/commands.html#mne-watershed-bem)
-
-[mne flash_bem](http://martinos.org/mne/dev/generated/commands.html#mne-flash-bem)
+* [mne watershed_bem](http://martinos.org/mne/dev/generated/commands.html#mne-watershed-bem)
+* [mne flash_bem](http://martinos.org/mne/dev/generated/commands.html#mne-flash-bem)
 
 Here we'll assume it's already computed. It takes a few minutes per subject.
 
@@ -89,13 +87,40 @@ mne.viz.plot_bem(subject='sample', subjects_dir=subjects_dir,
 
 
 {:.output .output_png}
-![png](../images/evoked_to_stc/forward_6_0.png)
+![png](../images/evoked_to_stc/forward_8_0.png)
 
 
+
+
+
+{:.input_area}
+```python
+%%time
+
+conductivity = (0.3,)  # for single layer
+# conductivity = (0.3, 0.006, 0.3)  # for three layers
+model = mne.make_bem_model(subject='sample', ico=4,
+                           conductivity=conductivity,
+                           subjects_dir=subjects_dir)
+bem = mne.make_bem_solution(model)
+```
+
+
+{:.output .output_stream}
+```
+CPU times: user 10.7 s, sys: 156 ms, total: 10.8 s
+Wall time: 8.65 s
+
+```
 
 ### Visualization the coregistration
 
-The coregistration is operation that allows to position the head and the sensors in a common coordinate system. In the MNE software the transformation to align the head and the sensors in stored in a so called *trans* file. It is a FIF file that ends with `-trans.fif`. It can be obtained with mne_analyze (Unix tools), mne.gui.coregistration (in Python) or mrilab if you're using a Neuromag system.
+The coregistration is operation that allows to position the head and the sensors in a common coordinate system. In the MNE software the transformation to align the head and the sensors is stored in a so called *trans* file. It is a FIF file that ends with `-trans.fif`. 
+
+It can be obtained with 
+* mne_analyze (Unix tools)
+* mne.gui.coregistration (in Python), or
+* mrilab if you're using a Neuromag system.
 
 For the Python version see http://martinos.org/mne/dev/generated/mne.gui.coregistration.html
 
@@ -123,15 +148,9 @@ Getting helmet for system 306m
 
 
 
-![jpeg](../images/evoked_to_stc/forward_8_1.jpeg)
+![jpeg](../images/evoked_to_stc/forward_12_1.jpeg)
 
 
-
-## Compute Source Space
-
-The source space defines the position of the candidate source locations.
-
-The following code compute such a source space with an OCT-6 resolution.
 
 
 
@@ -140,6 +159,12 @@ The following code compute such a source space with an OCT-6 resolution.
 mlab.close()
 ```
 
+
+## Compute Source Space
+
+The source space defines the position of the candidate source locations.
+
+The following code compute such a source space with an OCT-6 resolution.
 
 
 
@@ -182,8 +207,8 @@ Let's write a few lines of mayavi to see what it contains
 import numpy as np
 from surfer import Brain
 
-brain = Brain('sample', 'lh', 'inflated', subjects_dir=subjects_dir)
-surf = brain._geo
+brain = Brain('sample', 'lh', 'white', subjects_dir=subjects_dir)
+surf = brain.geo['lh']
 
 vertidx = np.where(src[0]['inuse'])[0]
 
@@ -195,25 +220,36 @@ Image(filename='source_space_subsampling.jpg', width=500)
 ```
 
 
-{:.output .output_traceback_line}
+
+
+
+![jpeg](../images/evoked_to_stc/forward_18_0.jpeg)
+
+
+
+Since it's hard to see the source points on the walls of the sulcus, it is common practice to inflate the white matter surface
+
+
+
+{:.input_area}
+```python
+brain = Brain('sample', 'lh', 'inflated', subjects_dir=subjects_dir)
+surf = brain.geo['lh']
+
+mlab.points3d(surf.x[vertidx], surf.y[vertidx],
+              surf.z[vertidx], color=(1, 1, 0), scale_factor=1.5)
+
+mlab.savefig('source_space_subsampling.jpg')
+Image(filename='source_space_subsampling.jpg', width=500)
 ```
 
-    ---------------------------------------------------------------------------
-
-    AttributeError                            Traceback (most recent call last)
-
-    <ipython-input-22-abe15096d65b> in <module>()
-          3 
-          4 brain = Brain('sample', 'lh', 'inflated', subjects_dir=subjects_dir)
-    ----> 5 surf = brain._geo
-          6 
-          7 vertidx = np.where(src[0]['inuse'])[0]
 
 
-    AttributeError: 'Brain' object has no attribute '_geo'
 
 
-```
+![jpeg](../images/evoked_to_stc/forward_20_0.jpeg)
+
+
 
 
 
@@ -236,29 +272,20 @@ To reduce computation we'll just compute a single layer BEM
 ```python
 %%time
 
-conductivity = (0.3,)  # for single layer
-# conductivity = (0.3, 0.006, 0.3)  # for three layers
-model = mne.make_bem_model(subject='sample', ico=4,
-                           conductivity=conductivity,
-                           subjects_dir=subjects_dir)
-bem = mne.make_bem_solution(model)
-```
-
-
-
-
-{:.input_area}
-```python
-%%time
-
 fwd = mne.make_forward_solution(raw_fname, trans=trans, src=src, bem=bem,
-                                fname=None, # don't save it to disk
                                 meg=True, # include MEG channels
                                 eeg=False, # include EEG channels
                                 mindist=5.0, # ignore sources <= 5mm from inner skull
                                 n_jobs=1) # number of jobs to run in parallel
 ```
 
+
+{:.output .output_stream}
+```
+CPU times: user 23.6 s, sys: 17.5 s, total: 41.2 s
+Wall time: 19.9 s
+
+```
 
 
 
@@ -284,7 +311,7 @@ Or read the EEG/MEG file from disk
 
 {:.input_area}
 ```python
-fwd = mne.read_forward_solution(fwd_fname, surf_ori=True)
+fwd = mne.read_forward_solution(fwd_fname)
 ```
 
 
@@ -318,7 +345,21 @@ print("Leadfield size : %d sensors x %d dipoles" % leadfield.shape)
 ```
 
 
-Compute sensitivity maps
+{:.output .output_stream}
+```
+Leadfield size : 366 sensors x 22494 dipoles
+
+```
+
+# Sensitivy maps
+
+Recall we had the gain matrix $G \in \mathbb{R}^{S \times C}$. 
+
+A column in this matrix $g \in \mathbb{R}^{C}$ tells us how much each sensor is to a particular source
+
+We can compute the sensitivity $a_s$ of the signals to each source point as:
+    
+$$a_s = \sqrt(g^{\top}g)$$
 
 
 
@@ -330,40 +371,11 @@ eeg_map = mne.sensitivity_map(fwd, ch_type='eeg', mode='fixed')
 ```
 
 
-# Show gain matrix a.k.a. leadfield matrix with sensitivy map
-
 
 
 {:.input_area}
 ```python
 %matplotlib inline
-import matplotlib.pyplot as plt
-
-picks_meg = mne.pick_types(fwd['info'], meg=True, eeg=False)
-picks_eeg = mne.pick_types(fwd['info'], meg=False, eeg=True)
-
-fig, axes = plt.subplots(2, 1, figsize=(10, 8), sharex=True)  
-fig.suptitle('Lead field matrix (500 dipoles only)', fontsize=14)
-
-for ax, picks, ch_type in zip(axes, [picks_meg, picks_eeg], ['meg', 'eeg']):
-   im = ax.imshow(leadfield[picks, :500], origin='lower', aspect='auto', cmap='RdBu_r')
-   ax.set_title(ch_type.upper())
-   ax.set_xlabel('sources')
-   ax.set_ylabel('sensors')
-   plt.colorbar(im, ax=ax, cmap='RdBu_r')
-```
-
-
-
-{:.output .output_png}
-![png](../images/evoked_to_stc/forward_28_0.png)
-
-
-
-
-
-{:.input_area}
-```python
 plt.hist([grad_map.data.ravel(), mag_map.data.ravel(), eeg_map.data.ravel()],
           bins=20, label=['Gradiometers', 'Magnetometers', 'EEG'],
          color=['c', 'b', 'k'])
@@ -376,21 +388,17 @@ plt.ylabel('count');
 
 
 {:.output .output_png}
-![png](../images/evoked_to_stc/forward_29_0.png)
+![png](../images/evoked_to_stc/forward_34_0.png)
 
 
-
-Uncomment the lines below to view
 
 
 
 {:.input_area}
 ```python
-# enable correct backend for 3d plotting
-%matplotlib qt
-clim = dict(kind='percent', lims=(0.0, 50, 99), smoothing_steps=3)  # let's see single dipoles
-brain = grad_map.plot(subject='sample', time_label='GRAD sensitivity',
-                     subjects_dir=subjects_dir, clim=clim, smoothing_steps=8);
+clim = dict(kind='percent', lims=(0.0, 50, 95), smoothing_steps=3)  # let's see single dipoles
+brain = grad_map.plot(subject='sample', time_label='GRAD sensitivity', surface='inflated',
+                      subjects_dir=subjects_dir, clim=clim, smoothing_steps=8, alpha=0.85);
 view = 'lat'
 brain.show_view(view)
 brain.save_image('sensitivity_map_grad_%s.jpg' % view)
@@ -401,7 +409,7 @@ Image(filename='sensitivity_map_grad_%s.jpg' % view, width=400)
 
 
 
-![jpeg](../images/evoked_to_stc/forward_31_0.jpeg)
+![jpeg](../images/evoked_to_stc/forward_35_0.jpeg)
 
 
 
@@ -409,11 +417,9 @@ Image(filename='sensitivity_map_grad_%s.jpg' % view, width=400)
 
 {:.input_area}
 ```python
-# enable correct backend for 3d plotting
-%matplotlib qt
 clim = dict(kind='percent', lims=(0.0, 50, 99), smoothing_steps=3)  # let's see single dipoles
-brain = eeg_map.plot(subject='sample', time_label='EEG sensitivity',
-                     subjects_dir=subjects_dir, clim=clim, smoothing_steps=8);
+brain = eeg_map.plot(subject='sample', time_label='EEG sensitivity', surface='inflated',
+                     subjects_dir=subjects_dir, clim=clim, smoothing_steps=8, alpha=0.9);
 view = 'lat'
 brain.show_view(view)
 brain.save_image('sensitivity_map_eeg_%s.jpg' % view)
@@ -424,22 +430,17 @@ Image(filename='sensitivity_map_eeg_%s.jpg' % view, width=400)
 
 
 
-![jpeg](../images/evoked_to_stc/forward_32_0.jpeg)
+![jpeg](../images/evoked_to_stc/forward_36_0.jpeg)
 
 
 
-## Exercise
 
-Plot the sensitivity maps for EEG and compare it with the MEG, can you justify the claims that:
 
-- MEG is not sensitive to radial sources
-- EEG is more sensitive to deep sources
+{:.input_area}
+```python
+mlab.close()
+```
 
-How will the MEG sensitivity maps and histograms change if you use a free instead if a fixed orientation?
-
-Try this changing the `mode` parameter in `mne.sensitivity_map` accordingly.
-
-Why don't we see any dipoles on the gyri?
 
 # Visualizing field lines based on coregistration
 
@@ -450,9 +451,8 @@ Why don't we see any dipoles on the gyri?
 from mne import read_evokeds
 from mne.datasets import sample
 from mne import make_field_map
-#data_path = sample.data_path()
 
-data_path = '/Users/alex/mne_data/MNE-sample-data'
+data_path = sample.data_path()
 
 raw_fname = data_path + '/MEG/sample/sample_audvis_filt-0-40_raw.fif'
 
@@ -504,6 +504,27 @@ Image(filename='field_map.jpg', width=800)
 
 
 
-![jpeg](../images/evoked_to_stc/forward_38_0.jpeg)
+![jpeg](../images/evoked_to_stc/forward_42_0.jpeg)
 
 
+
+
+
+{:.input_area}
+```python
+mlab.close()
+```
+
+
+## Exercise
+
+Plot the sensitivity maps for EEG and compare it with the MEG, can you justify the claims that:
+
+- MEG is not sensitive to radial sources
+- EEG is more sensitive to deep sources
+
+How will the MEG sensitivity maps and histograms change if you use a free instead if a fixed orientation?
+
+Try this changing the `mode` parameter in `mne.sensitivity_map` accordingly.
+
+Why don't we see any dipoles on the gyri?
