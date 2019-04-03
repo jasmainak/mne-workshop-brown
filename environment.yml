@@ -11,4 +11,7 @@ dependencies:
 - notebook
 - pip:
   - mne
+  - pysurfer
+  - nibabel
   - https://api.github.com/repos/autoreject/autoreject/zipball/master
+  - xvfbwrapper
