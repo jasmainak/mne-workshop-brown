@@ -8,6 +8,7 @@ dependencies:
 - matplotlib
 - rise
 - mayavi
+- notebook
 - pip:
   - mne
   - https://api.github.com/repos/autoreject/autoreject/zipball/master
