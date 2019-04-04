@@ -3,6 +3,7 @@ redirect_from:
   - "/raw-to-evoked/raw"
 interact_link: content/raw_to_evoked/raw.ipynb
 kernel_name: python3
+has_widgets: false
 title: 'Raw data'
 prev_page:
   url: /raw_to_evoked/readme
@@ -39,14 +40,14 @@ The core data structure is simply a 2D numpy array (channels × samples)
 [Info](https://martinos.org/mne/stable/generated/mne.Info.html#mne.Info) object (`.info` attribute)
 (see [The Info data structure](https://martinos.org/mne/stable/auto_tutorials/plot_info.html#tut-info-objects)).
 
-The most common way to load continuous data is from a .fif file. For more
-information on [loading data from other formats](https://martinos.org/mne/stable/manual/io.html#ch-convert), or
-creating it [from scratch](https://martinos.org/mne/stable/auto_tutorials/plot_creating_data_structures.html#tut-creating-data-structures).
-
 
 
 Loading continuous data
 -----------------------
+
+The most common way to load continuous data is from a .fif file. For more
+information on [loading data from other formats](https://martinos.org/mne/stable/manual/io.html#ch-convert), or
+creating it [from scratch](https://martinos.org/mne/stable/auto_tutorials/plot_creating_data_structures.html#tut-creating-data-structures).
 
 Load an example dataset, the preload flag loads the data into memory now:
 
@@ -75,7 +76,7 @@ raw.set_eeg_reference('average', projection=True)  # set EEG average reference
 
 {:.output .output_stream}
 ```
-Opening raw data file /local_mount/space/meghnn/1/users/mjas/mne_data/MNE-sample-data/MEG/sample/sample_audvis_raw.fif...
+Opening raw data file /home/mainak/Desktop/projects/github_repos/mne-python/examples/MNE-sample-data/MEG/sample/sample_audvis_raw.fif...
     Read a total of 3 projection items:
         PCA-v1 (1 x 102)  idle
         PCA-v2 (1 x 102)  idle
@@ -170,21 +171,34 @@ Selecting subsets of channels and samples
 It is possible to use more intelligent indexing to extract data, using
 channel names, types or time ranges.
 
-
+Pull all MEG gradiometer channels:
+Make sure to use .copy() or it will overwrite the data
 
 
 
 {:.input_area}
 ```python
-# Pull all MEG gradiometer channels:
-# Make sure to use .copy() or it will overwrite the data
 meg_only = raw.copy().pick_types(meg=True)
 eeg_only = raw.copy().pick_types(meg=False, eeg=True)
+```
 
-# The MEG flag in particular lets you specify a string for more specificity
+
+The MEG flag in particular lets you specify a string for more specificity
+
+
+
+{:.input_area}
+```python
 grad_only = raw.copy().pick_types(meg='grad')
+```
 
-# Or you can use custom channel names
+
+Or you can use custom channel names
+
+
+
+{:.input_area}
+```python
 pick_chans = ['MEG 0112', 'MEG 0111', 'MEG 0122', 'MEG 0123']
 specific_chans = raw.copy().pick_channels(pick_chans)
 print(meg_only)
@@ -222,7 +236,7 @@ del eeg, meg, meg_only, grad_only, eeg_only, data, specific_chans
 
 
 {:.output .output_png}
-![png](../images/raw_to_evoked/raw_15_0.png)
+![png](../images/raw_to_evoked/raw_20_0.png)
 
 
 
@@ -311,7 +325,7 @@ raw.plot(block=True, lowpass=40);
 
 
 {:.output .output_png}
-![png](../images/raw_to_evoked/raw_23_0.png)
+![png](../images/raw_to_evoked/raw_28_0.png)
 
 
 
@@ -323,6 +337,32 @@ The channels are color coded by channel type.
 * Initial scaling factors can be set with parameter `scalings`. 
 * If you don’t know the scaling factor for channels, you can automatically set them by passing scalings=’auto’. 
 * With `pageup/pagedown` and `home/end` keys you can adjust the amount of data viewed at once.
+
+We can also plot the PSD to inspect:
+* Power line
+* Bad channels
+* Head position indicator coils
+* Whether data is filtered or not
+
+
+
+{:.input_area}
+```python
+fig = raw.copy().pick_types(meg='mag').plot_psd(spatial_colors=True, show=False);
+```
+
+
+{:.output .output_stream}
+```
+Effective window size : 3.410 (s)
+
+```
+
+
+{:.output .output_png}
+![png](../images/raw_to_evoked/raw_31_1.png)
+
+
 
 Exercises
 --------------
@@ -343,6 +383,21 @@ Exercises
 
 {:.input_area}
 ```python
+# your code here
+```
+
+
+3) Can you plot the data in the trigger channel?
+
+*HINT*: The channel type is called 'stim'
+
+
+
+{:.input_area}
+```python
+from mne import pick_types
+import matplotlib.pyplot as plt
+
 # your code here
 ```
 
