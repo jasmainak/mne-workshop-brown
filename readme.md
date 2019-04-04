@@ -12,9 +12,9 @@ Each day is a 1.5 to 2 hours hands-on introduction
 to MNE-Python.
 
 Here's a brief break-down of what's coming up:
-* Day 1: [Raw to evoked](raw_to_evoked/readme)
-* Day 2: [Preprocessing](preprocessing/readme)
-* Day 3: [Source Modeling](evoked_to_stc/readme)
+* Day 1: [Raw to evoked](raw_to_evoked/readme.md)
+* Day 2: [Preprocessing](preprocessing/readme.md)
+* Day 3: [Source Modeling](evoked_to_stc/readme.md)
 
 Registered workshop participants can access pre-installed Python environment by logging into [https://ccv.jupyter.brown.edu](https://ccv.jupyter.brown.edu)
 with their Github accounts.
