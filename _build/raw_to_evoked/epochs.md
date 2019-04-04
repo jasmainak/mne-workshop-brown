@@ -3,6 +3,7 @@ redirect_from:
   - "/raw-to-evoked/epochs"
 interact_link: content/raw_to_evoked/epochs.ipynb
 kernel_name: python3
+has_widgets: false
 title: 'Epochs'
 prev_page:
   url: /raw_to_evoked/raw
@@ -74,7 +75,7 @@ raw = mne.io.read_raw_fif(
 
 {:.output .output_stream}
 ```
-Opening raw data file /local_mount/space/meghnn/1/users/mjas/mne_data/MNE-sample-data/MEG/sample/sample_audvis_raw.fif...
+Opening raw data file /home/mainak/Desktop/projects/github_repos/mne-python/examples/MNE-sample-data/MEG/sample/sample_audvis_raw.fif...
     Read a total of 3 projection items:
         PCA-v1 (1 x 102)  idle
         PCA-v2 (1 x 102)  idle
@@ -242,7 +243,9 @@ print(epochs['Auditory/Right'])
 ```
 
 Note the '/'s in the event code labels. These separators allow tag-based
-selection of epoch sets; every string separated by '/' can be entered, and
+selection of epoch sets; 
+
+Every string separated by '/' can be entered, and
 returns the subset of epochs matching any of the strings. E.g.,
 
 
@@ -266,6 +269,22 @@ print(epochs['Right', 'Left'])
 
 ```
 
+
+
+{:.input_area}
+```python
+print(epochs['Auditory'])
+```
+
+
+{:.output .output_stream}
+```
+<Epochs  |   145 events (all good), -0.0998976 - 1.00064 sec, baseline [None, 0], ~279.0 MB, data loaded,
+ 'Auditory/Left': 72
+ 'Auditory/Right': 73>
+
+```
+
 Note that MNE will not complain if you ask for tags not present in the
 object, as long as it can find some match: the below example is parsed as
 (inclusive) 'Right' OR 'Left'. However, if no match is found, an error is
@@ -283,7 +302,7 @@ print(epochs_still_only_r)
 
 try:
     epochs_still_only_r["Left"]
-except KeyError:
+except KeyError: 
     print("Tag-based selection without any matches raises a KeyError!")
 ```
 
@@ -410,17 +429,13 @@ Dropped 1 epoch
 
 
 
-You can also inspect the reason why epochs were dropped by looking at the
-list stored in ``epochs.drop_log`` or plot them with
-[epochs.plot_drop_log()](https://martinos.org/mne/stable/generated/mne.Epochs.html#mne.Epochs.plot_drop_log). The indices
-from the original set of events are stored in ``epochs.selection``.
+You can also inspect the reason why epochs were dropped.
 
 
 
 {:.input_area}
 ```python
-print(epochs.drop_log)
-epochs.plot_drop_log();
+print(epochs.drop_log);
 ```
 
 
@@ -431,10 +446,40 @@ epochs.plot_drop_log();
 ```
 
 
+
+{:.input_area}
+```python
+epochs.plot_drop_log();
+```
+
+
+
 {:.output .output_png}
-![png](../images/raw_to_evoked/epochs_32_1.png)
+![png](../images/raw_to_evoked/epochs_34_0.png)
 
 
+
+The indices from the original set of events are stored in ``epochs.selection``.
+
+
+
+{:.input_area}
+```python
+print(epochs.selection)
+```
+
+
+{:.output .output_stream}
+```
+[  2   4   6   8  10  12  14  19  21  23  25  27  29  31  33  35  38  42
+  44  46  48  50  52  54  56  58  63  65  67  69  71  73  75  77  88  90
+  92  94  96  98 101 103 105 107 109 111 113 115 117 122 126 128 130 132
+ 134 136 138 140 142 145 151 153 155 157 159 161 168 170 174 176 178 182
+ 184 189 191 193 197 199 201 206 214 218 220 222 224 229 231 233 235 237
+ 239 241 243 245 248 250 252 254 256 258 262 264 269 271 273 281 285 290
+ 292 294 296 298 300 302 304 306 308 310 313 315 317]
+
+```
 
 Input/Output
 ------------------
@@ -470,7 +515,7 @@ epochs = mne.read_epochs(epochs_fname, preload=False)
 
 {:.output .output_stream}
 ```
-Reading /local_mount/space/meghnn/1/users/mjas/mne_data/MNE-sample-data/MEG/sample/sample-epo.fif ...
+Reading /home/mainak/Desktop/projects/github_repos/mne-python/examples/MNE-sample-data/MEG/sample/sample-epo.fif ...
     Read a total of 3 projection items:
         PCA-v1 (1 x 102) active
         PCA-v2 (1 x 102) active
@@ -478,6 +523,9 @@ Reading /local_mount/space/meghnn/1/users/mjas/mne_data/MNE-sample-data/MEG/samp
     Found the data of interest:
         t =     -99.90 ...    1000.64 ms
         0 CTF compensation matrices available
+121 matching events found
+Applying baseline correction (mode: mean)
+Created an SSP operator (subspace dimension = 3)
 121 matching events found
 Applying baseline correction (mode: mean)
 Not setting metadata
@@ -509,7 +557,7 @@ plt.tight_layout()
 
 
 {:.output .output_png}
-![png](../images/raw_to_evoked/epochs_38_0.png)
+![png](../images/raw_to_evoked/epochs_42_0.png)
 
 
 
@@ -518,6 +566,54 @@ For creating `Evoked` from other data structures see [mne.EvokedArray](https://m
 To export and manipulate Epochs using Pandas see
 [Export epochs to pandas dataframe](https://martinos.org/mne/stable/auto_tutorials/plot_epochs_to_data_frame.html#sphx-glr-auto-tutorials-plot-epochs-to-data-frame-py),
 or to work directly with metadata in MNE-Python see [Pandas querying and metadata with Epochs objects](https://martinos.org/mne/stable/auto_tutorials/plot_metadata_epochs.html#sphx-glr-auto-tutorials-plot-metadata-epochs-py).
+
+# Visualizing epochs data
+
+We can visualize epochs the same way as raw data
+
+
+
+{:.input_area}
+```python
+epochs.plot(block=True, events=events);
+```
+
+
+{:.output .output_stream}
+```
+Loading data for 20 events and 662 original time points ...
+
+```
+
+
+{:.output .output_png}
+![png](../images/raw_to_evoked/epochs_45_1.png)
+
+
+
+We can mark bad epochs interactively and scroll through the data
+
+It's also possible to plot a single epoch as an image
+
+
+
+{:.input_area}
+```python
+epochs.plot_image(278, cmap='interactive', sigma=1., vmin=-400, vmax=400);
+```
+
+
+{:.output .output_stream}
+```
+Loading data for 121 events and 662 original time points ...
+
+```
+
+
+{:.output .output_png}
+![png](../images/raw_to_evoked/epochs_48_1.png)
+
+
 
 Exercises
 --------------
@@ -535,7 +631,7 @@ epochs = mne.read_epochs(epochs_fname, preload=False)
 
 {:.output .output_stream}
 ```
-Reading /local_mount/space/meghnn/1/users/mjas/mne_data/MNE-sample-data/MEG/sample/sample-epo.fif ...
+Reading /home/mainak/Desktop/projects/github_repos/mne-python/examples/MNE-sample-data/MEG/sample/sample-epo.fif ...
     Read a total of 3 projection items:
         PCA-v1 (1 x 102) active
         PCA-v2 (1 x 102) active
@@ -543,6 +639,9 @@ Reading /local_mount/space/meghnn/1/users/mjas/mne_data/MNE-sample-data/MEG/samp
     Found the data of interest:
         t =     -99.90 ...    1000.64 ms
         0 CTF compensation matrices available
+121 matching events found
+Applying baseline correction (mode: mean)
+Created an SSP operator (subspace dimension = 3)
 121 matching events found
 Applying baseline correction (mode: mean)
 Not setting metadata
@@ -562,7 +661,7 @@ Created an SSP operator (subspace dimension = 3)
 ```
 
 
-2) Can you plot the EOG channel for these epochs and verify that these do indeed contain eyeblinks?
+3) Can you plot the EOG channel for these epochs and verify that these do indeed contain eyeblinks?
 
 
 
