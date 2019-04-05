@@ -3,6 +3,7 @@ redirect_from:
   - "/raw-to-evoked/info"
 interact_link: content/raw_to_evoked/info.ipynb
 kernel_name: python3
+has_widgets: false
 title: 'Info'
 prev_page:
   url: /raw_to_evoked/evoked
