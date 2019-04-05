@@ -348,7 +348,11 @@ We can also plot the PSD to inspect:
 
 {:.input_area}
 ```python
-fig = raw.copy().pick_types(meg='mag').plot_psd(spatial_colors=True, show=False);
+fig, ax = plt.subplots(1, 1)
+raw.copy().pick_types(meg='mag').plot_psd(spatial_colors=False, show=False,
+                                          ax=ax);
+for freq in [60., 120., 180.]:
+    ax.axvline(freq, linestyle='--', alpha=0.6)
 ```
 
 

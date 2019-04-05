@@ -3,6 +3,7 @@ redirect_from:
   - "/raw-to-evoked/evoked"
 interact_link: content/raw_to_evoked/evoked.ipynb
 kernel_name: python3
+has_widgets: false
 title: 'Evoked'
 prev_page:
   url: /raw_to_evoked/epochs
@@ -59,7 +60,7 @@ print(evokeds)
 
 {:.output .output_stream}
 ```
-Reading /local_mount/space/meghnn/1/users/mjas/mne_data/MNE-sample-data/MEG/sample/sample_audvis-ave.fif ...
+Reading /home/mainak/Desktop/projects/github_repos/mne-python/examples/MNE-sample-data/MEG/sample/sample_audvis-ave.fif ...
     Read a total of 4 projection items:
         PCA-v1 (1 x 102) active
         PCA-v2 (1 x 102) active
@@ -128,7 +129,7 @@ print(evoked)
 
 {:.output .output_stream}
 ```
-Reading /local_mount/space/meghnn/1/users/mjas/mne_data/MNE-sample-data/MEG/sample/sample_audvis-ave.fif ...
+Reading /home/mainak/Desktop/projects/github_repos/mne-python/examples/MNE-sample-data/MEG/sample/sample_audvis-ave.fif ...
     Read a total of 4 projection items:
         PCA-v1 (1 x 102) active
         PCA-v2 (1 x 102) active
@@ -146,11 +147,7 @@ Projections have already been applied. Setting proj attribute to True.
 
 ```
 
-If you're gone through the tutorials of raw and epochs datasets, you're
-probably already familiar with the [Info](https://martinos.org/mne/stable/auto_tutorials/plot_info.html) attribute.
-There is nothing new or special with the ``evoked.info``. All the relevant
-info is still there.
-
+The [Info](https://martinos.org/mne/stable/auto_tutorials/plot_info.html) attribute is also present here just as in raw and epochs.
 
 
 
@@ -453,9 +450,7 @@ Data from channel MEG 0142:
 
 If you want to import evoked data from some other system and you have it in a
 numpy array you can use [mne.EvokedArray](https://martinos.org/mne/stable/generated/mne.EvokedArray.html) for that. All you need is
-the data and some info about the evoked data. For more information, see
-[Creating MNE's data structures from scratch](https://martinos.org/mne/stable/auto_tutorials/plot_creating_data_structures.html#tut-creating-data-structures).
-
+the data and some info about the evoked data. 
 
 
 
@@ -463,17 +458,118 @@ the data and some info about the evoked data. For more information, see
 {:.input_area}
 ```python
 evoked = mne.EvokedArray(data, evoked.info, tmin=evoked.times[0])
-evoked.plot(time_unit='s');
+```
+
+
+
+For more information, see
+[Creating MNE's data structures from scratch](https://martinos.org/mne/stable/auto_tutorials/plot_creating_data_structures.html#tut-creating-data-structures).
+
+Visualization
+-------------
+
+We can plot the evoked response
+
+
+
+{:.input_area}
+```python
+evoked.plot(time_unit='s', exclude=[]);
 ```
 
 
 
 {:.output .output_png}
-![png](../images/raw_to_evoked/evoked_16_0.png)
+![png](../images/raw_to_evoked/evoked_19_0.png)
 
 
 
-To write an evoked dataset to a file, use the [`mne.Evoked.save`](https://martinos.org/mne/dev/generated/mne.Evoked.html#mne.Evoked.save) method.
-To save multiple categories to a single file, see [`mne.write_evokeds`](https://martinos.org/mne/stable/generated/mne.write_evokeds.html#mne.write_evokeds).
+We can also plot the topographic map for some time instances
 
+
+
+{:.input_area}
+```python
+evoked.plot_topomap();
+```
+
+
+
+{:.output .output_png}
+![png](../images/raw_to_evoked/evoked_21_0.png)
+
+
+
+Or even plot them both together ...
+
+
+
+{:.input_area}
+```python
+evoked.copy().pick_types(meg='mag').plot_joint();
+```
+
+
+
+{:.output .output_png}
+![png](../images/raw_to_evoked/evoked_23_0.png)
+
+
+
+To contrast evokeds, we can do
+
+
+
+{:.input_area}
+```python
+vmin, vmax =-120, 120
+evokeds[2].plot_topomap(vmin=vmin, vmax=vmax);
+evokeds[3].plot_topomap(vmin=vmin, vmax=vmax);
+contrast = mne.combine_evoked(evokeds[2:], weights=[1, -1])
+contrast.plot_topomap(vmin=vmin, vmax=vmax);
+```
+
+
+
+{:.output .output_png}
+![png](../images/raw_to_evoked/evoked_25_0.png)
+
+
+
+
+{:.output .output_png}
+![png](../images/raw_to_evoked/evoked_25_1.png)
+
+
+
+
+{:.output .output_png}
+![png](../images/raw_to_evoked/evoked_25_2.png)
+
+
+
+Exercises
+--------------
+
+1) How will you save evoked data to disk?
+
+
+
+
+{:.input_area}
+```python
+# your code here
+```
+
+
+2) Can you plot the topomap at 10 evenly spaced time instances?
+
+HINT: Use np.linspace
+
+
+
+{:.input_area}
+```python
+# your code here
+```
 

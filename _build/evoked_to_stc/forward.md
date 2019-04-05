@@ -28,10 +28,19 @@ The lead-field matrix or forward operator $G$ is computed using the physics of t
 
 {:.input_area}
 ```python
+import matplotlib.pyplot as plt
+
 from IPython.display import Image
 from mayavi import mlab
+mlab.init_notebook('png')
 ```
 
+
+{:.output .output_stream}
+```
+Notebook initialized with png backend.
+
+```
 
 # Computing the forward operator
 
@@ -85,9 +94,17 @@ mne.viz.plot_bem(subject='sample', subjects_dir=subjects_dir,
 ```
 
 
+{:.output .output_stream}
+```
+Using surface: /home/jovyan/mne_data/MNE-sample-data/subjects/sample/bem/inner_skull.surf
+Using surface: /home/jovyan/mne_data/MNE-sample-data/subjects/sample/bem/outer_skull.surf
+Using surface: /home/jovyan/mne_data/MNE-sample-data/subjects/sample/bem/outer_skin.surf
+
+```
+
 
 {:.output .output_png}
-![png](../images/evoked_to_stc/forward_8_0.png)
+![png](../images/evoked_to_stc/forward_8_1.png)
 
 
 
@@ -95,7 +112,7 @@ mne.viz.plot_bem(subject='sample', subjects_dir=subjects_dir,
 
 {:.input_area}
 ```python
-%%time
+# %%time
 
 conductivity = (0.3,)  # for single layer
 # conductivity = (0.3, 0.006, 0.3)  # for three layers
@@ -108,8 +125,21 @@ bem = mne.make_bem_solution(model)
 
 {:.output .output_stream}
 ```
-CPU times: user 10.7 s, sys: 156 ms, total: 10.8 s
-Wall time: 8.65 s
+Creating the BEM geometry...
+Going from 4th to 4th subdivision of an icosahedron (n_tri: 5120 -> 5120)
+inner skull CM is   0.67 -10.01  44.26 mm
+Surfaces passed the basic topology checks.
+Complete.
+
+Approximation method : Linear collocation
+
+Homogeneous model surface loaded.
+Computing the linear collocation solution...
+    Matrix coefficients...
+        inner_skull (2562) -> inner_skull (2562) ...
+    Inverting the coefficient matrix...
+Solution ready.
+BEM geometry computations complete.
 
 ```
 
@@ -140,6 +170,10 @@ Image(filename='coreg.jpg', width=500)
 
 {:.output .output_stream}
 ```
+    Read a total of 3 projection items:
+        PCA-v1 (1 x 102)  idle
+        PCA-v2 (1 x 102)  idle
+        PCA-v3 (1 x 102)  idle
 Using outer_skin.surf for head surface.
 Getting helmet for system 306m
 
@@ -270,7 +304,7 @@ To reduce computation we'll just compute a single layer BEM
 
 {:.input_area}
 ```python
-%%time
+# %%time
 
 fwd = mne.make_forward_solution(raw_fname, trans=trans, src=src, bem=bem,
                                 meg=True, # include MEG channels
@@ -279,13 +313,6 @@ fwd = mne.make_forward_solution(raw_fname, trans=trans, src=src, bem=bem,
                                 n_jobs=1) # number of jobs to run in parallel
 ```
 
-
-{:.output .output_stream}
-```
-CPU times: user 23.6 s, sys: 17.5 s, total: 41.2 s
-Wall time: 19.9 s
-
-```
 
 
 
@@ -467,6 +494,73 @@ trans_fname = data_path + '/MEG/sample/sample_audvis_raw-trans.fif'
 {:.input_area}
 ```python
 make_field_map?
+```
+
+
+
+{:.output .output_data_text}
+```
+[0;31mSignature:[0m
+[0mmake_field_map[0m[0;34m([0m[0;34m[0m
+[0;34m[0m    [0mevoked[0m[0;34m,[0m[0;34m[0m
+[0;34m[0m    [0mtrans[0m[0;34m=[0m[0;34m'auto'[0m[0;34m,[0m[0;34m[0m
+[0;34m[0m    [0msubject[0m[0;34m=[0m[0;32mNone[0m[0;34m,[0m[0;34m[0m
+[0;34m[0m    [0msubjects_dir[0m[0;34m=[0m[0;32mNone[0m[0;34m,[0m[0;34m[0m
+[0;34m[0m    [0mch_type[0m[0;34m=[0m[0;32mNone[0m[0;34m,[0m[0;34m[0m
+[0;34m[0m    [0mmode[0m[0;34m=[0m[0;34m'fast'[0m[0;34m,[0m[0;34m[0m
+[0;34m[0m    [0mmeg_surf[0m[0;34m=[0m[0;34m'helmet'[0m[0;34m,[0m[0;34m[0m
+[0;34m[0m    [0morigin[0m[0;34m=[0m[0;34m([0m[0;36m0.0[0m[0;34m,[0m [0;36m0.0[0m[0;34m,[0m [0;36m0.04[0m[0;34m)[0m[0;34m,[0m[0;34m[0m
+[0;34m[0m    [0mn_jobs[0m[0;34m=[0m[0;36m1[0m[0;34m,[0m[0;34m[0m
+[0;34m[0m    [0mverbose[0m[0;34m=[0m[0;32mNone[0m[0;34m,[0m[0;34m[0m
+[0;34m[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;31mDocstring:[0m
+Compute surface maps used for field display in 3D.
+
+Parameters
+----------
+evoked : Evoked | Epochs | Raw
+    The measurement file. Need to have info attribute.
+trans : str | 'auto' | None
+    The full path to the `*-trans.fif` file produced during
+    coregistration. If present or found using 'auto'
+    the maps will be in MRI coordinates.
+    If None, map for EEG data will not be available.
+subject : str | None
+    The subject name corresponding to FreeSurfer environment
+    variable SUBJECT. If None, map for EEG data will not be available.
+subjects_dir : str
+    The path to the freesurfer subjects reconstructions.
+    It corresponds to Freesurfer environment variable SUBJECTS_DIR.
+ch_type : None | 'eeg' | 'meg'
+    If None, a map for each available channel type will be returned.
+    Else only the specified type will be used.
+mode : str
+    Either `'accurate'` or `'fast'`, determines the quality of the
+    Legendre polynomial expansion used. `'fast'` should be sufficient
+    for most applications.
+meg_surf : str
+    Should be ``'helmet'`` or ``'head'`` to specify in which surface
+    to compute the MEG field map. The default value is ``'helmet'``
+origin : array-like, shape (3,) | str
+    Origin of the sphere in the head coordinate frame and in meters.
+    Can be ``'auto'``, which means a head-digitization-based origin
+    fit. Default is ``(0., 0., 0.04)``.
+
+    .. versionadded:: 0.11
+n_jobs : int
+    The number of jobs to run in parallel.
+verbose : bool, str, int, or None
+    If not None, override default verbose level (see :func:`mne.verbose`
+    and :ref:`Logging documentation <tut_logging>` for more).
+
+Returns
+-------
+surf_maps : list
+    The surface maps to be used for field plots. The list contains
+    separate ones for MEG and EEG (if both MEG and EEG are present).
+[0;31mFile:[0m      /opt/conda/lib/python3.7/site-packages/mne/forward/_field_interpolation.py
+[0;31mType:[0m      function
+
 ```
 
 
