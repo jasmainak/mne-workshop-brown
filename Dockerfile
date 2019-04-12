@@ -66,5 +66,12 @@ RUN pip install ipywidgets && \
     pip install mne && \
     pip install https://api.github.com/repos/autoreject/autoreject/zipball/master
 
+RUN git init . && \
+    git remote add origin https://github.com/jasmainak/mne-workshop-brown.git && \
+    git fetch origin gh-pages && \
+    git checkout gh-pages
+
+RUN ipython -c "import mne; print(mne.datasets.sample.data_path(verbose=False))"
+
 # Add an x-server to the entrypoint. This is needed by Mayavi
 ENTRYPOINT ["tini", "-g", "--", "xvfb-run"] 
