@@ -1,0 +1,4 @@
+content/**/*.jpg
+content/**/*.jpeg
+content/**/*.html
+content/**/*.ipynb_checkpoints
