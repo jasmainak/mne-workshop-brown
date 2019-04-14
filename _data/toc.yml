@@ -69,6 +69,9 @@
   not_numbered: true
   expand_sections: true
   sections:
+  - title: Quality assurance
+    url: /preprocessing/mne-report
+    not_numbered: true
   - title: Filtering
     url: /preprocessing/filtering
     not_numbered: true
