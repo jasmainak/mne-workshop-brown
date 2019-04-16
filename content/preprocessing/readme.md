@@ -7,7 +7,7 @@ Program
 |              |          							|		    						|
 | :------      | :-----   							| :-----  							|
 | 12:00--12:20 | [Quality assurance](mne-report) 	| How to do scalable quality assurance |
-| 12:20--12:40 | [Filtering](epochs)   				| Filtering the data             	|
+| 12:20--12:40 | [Filtering](filtering)   				| Filtering the data             	|
 | 12:40--13:10 | [Autoreject](autoreject)		    | Removing sensor artifacts in data
 | 13:00--13:30 | [SSP](ssp)   						| Signal Space Projection         |
 | 13:30--14:00 | [ICA](ica)       					| Independent Component Analysis  |
@@ -24,18 +24,15 @@ Filtering
 
 A brief look at the filtering options available in MNE Python
 
-Removing artifacts
-==================
-
 Autoreject
-~~~~~~~~~~
+==========
 
 Sometimes, sensors can be bad due to loose contact or
 flux jumps. Autoreject is an automated method to label
 and repair artifacts in the data.
 
 Spatial filtering
-~~~~~~~~~~~~~~~~~
+=================
 
 Physiological artifacts that are not related to brain
 rhythms such as heart beats and eyeblinks have prototypical

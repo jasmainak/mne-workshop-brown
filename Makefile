@@ -35,6 +35,7 @@ copypush:
 	cp -r content/* content_master && \
 	sed -i 's/readme/readme.md/g' content_master/readme.md && \
 	sed -i 's/)/.ipynb)/g' content_master/raw_to_evoked/readme.md && \
+	sed -i 's/)/.ipynb)/g' content_master/preprocessing/readme.md && \
 	rm content_master/*.html && \
 	cd content_master && \
 	git add * && \
