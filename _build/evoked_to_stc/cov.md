@@ -3,7 +3,6 @@ redirect_from:
   - "/evoked-to-stc/cov"
 interact_link: content/evoked_to_stc/cov.ipynb
 kernel_name: python3
-has_widgets: false
 title: 'Covariance'
 prev_page:
   url: /evoked_to_stc/readme

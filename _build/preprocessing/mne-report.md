@@ -1,7 +1,6 @@
 ---
 interact_link: content/preprocessing/mne-report.ipynb
 kernel_name: python3
-has_widgets: false
 title: 'Quality assurance'
 prev_page:
   url: /preprocessing/readme
@@ -18,6 +17,8 @@ Let's say we want to analyze 100 subjects.
 
 How do we do quality assurancy in a scalable manner?
 
+## MNE report
+
 
 
 {:.input_area}
@@ -26,31 +27,13 @@ from mne.report import Report
 ```
 
 
-
-
-{:.input_area}
-```python
-rep = Report()
-```
-
-
-{:.output .output_stream}
-```
-Embedding : jquery-1.10.2.min.js
-Embedding : jquery-ui.min.js
-Embedding : bootstrap.min.js
-Embedding : jquery-ui.min.css
-Embedding : bootstrap.min.css
-
-```
-
 A report contains:
     * Figures
     * Images
     * Custom HTML
     * Sliders
 
-First, let us generate some figures.
+First, let us generate some figures for the report.
 
 
 
@@ -90,8 +73,26 @@ Now let's pretend this data came from 3 different subjects
 raw1 = raw.copy().crop(0, 20)
 raw2 = raw.copy().crop(20, 40)
 raw3 = raw.copy().crop(40, 60)
+
+raw1.save(data_path + '/MEG/sample/sub-01_raw.fif', overwrite=True)
+raw2.save(data_path + '/MEG/sample/sub-02_raw.fif', overwrite=True)
+raw3.save(data_path + '/MEG/sample/sub-03_raw.fif', overwrite=True)
 ```
 
+
+{:.output .output_stream}
+```
+Overwriting existing file.
+Writing /home/mainak/Desktop/projects/github_repos/mne-python/examples/MNE-sample-data/MEG/sample/sub-01_raw.fif
+Closing /home/mainak/Desktop/projects/github_repos/mne-python/examples/MNE-sample-data/MEG/sample/sub-01_raw.fif [done]
+Overwriting existing file.
+Writing /home/mainak/Desktop/projects/github_repos/mne-python/examples/MNE-sample-data/MEG/sample/sub-02_raw.fif
+Closing /home/mainak/Desktop/projects/github_repos/mne-python/examples/MNE-sample-data/MEG/sample/sub-02_raw.fif [done]
+Overwriting existing file.
+Writing /home/mainak/Desktop/projects/github_repos/mne-python/examples/MNE-sample-data/MEG/sample/sub-03_raw.fif
+Closing /home/mainak/Desktop/projects/github_repos/mne-python/examples/MNE-sample-data/MEG/sample/sub-03_raw.fif [done]
+
+```
 
 Now, we can have a function to go from raw to evoked
 
@@ -101,12 +102,14 @@ Now, we can have a function to go from raw to evoked
 ```python
 event_id = {'Auditory/Left': 3, 'Auditory/Right': 4}
 
-def raw_to_evoked(raw, tmin=-0.1, tmax=0.5):
+def raw_to_evoked(raw_fname, tmin=-0.1, tmax=0.5):
+    
+    raw = mne.io.read_raw_fif(data_path + '/MEG/sample/' + raw_fname, preload=True)
     fig1 = raw.plot();
     raw.filter(0, 40.)
     
     events = mne.find_events(raw, stim_channel='STI 014')
-    epochs = mne.Epochs(raw, events, event_id, tmin, tmaxe)
+    epochs = mne.Epochs(raw, events, event_id, tmin, tmax)
     fig2 = epochs.plot();
     
     evoked_l = epochs['Left'].average();
@@ -117,18 +120,36 @@ def raw_to_evoked(raw, tmin=-0.1, tmax=0.5):
 ```
 
 
-Now, we can do:
+Now, we can get all the figure handles:
 
 
 
 {:.input_area}
 ```python
 %%capture
-figs = raw_to_evoked(raw1)
+figs = raw_to_evoked('sub-01_raw.fif')
 ```
 
 
-And then, add these to the report
+Now comes the actual report
+
+
+
+{:.input_area}
+```python
+rep = Report()
+```
+
+
+{:.output .output_stream}
+```
+Embedding : jquery-1.10.2.min.js
+Embedding : jquery-ui.min.js
+Embedding : bootstrap.min.js
+Embedding : jquery-ui.min.css
+Embedding : bootstrap.min.css
+
+```
 
 
 
@@ -150,14 +171,6 @@ custom
  ... Epochs
  ... Topomap
  ... Butterfly
- ... Raw
- ... Epochs
- ... Topomap
- ... Butterfly
- ... Raw
- ... Epochs
- ... Topomap
- ... Butterfly
 
 ```
 
@@ -171,7 +184,7 @@ custom
 
 
 
-If you are in Jupyter lab environment, you can right click and say: "open in new browser tab"
+The report can be found [here](report_raw_to_evoked.html)
 
 We can go even more fancy. Let's try to process all the three subjects.
 
@@ -181,7 +194,7 @@ We can go even more fancy. Let's try to process all the three subjects.
 ```python
 %%capture
 rep = Report()
-for idx, r in enumerate([raw1, raw2, raw3]):
+for idx, r in enumerate(['sub-01_raw.fif', 'sub-02_raw.fif', 'sub-03_raw.fif']):
     figs = raw_to_evoked(r)
     rep.add_figs_to_section(figs, captions=captions, section='Subject %02d' % idx)
 rep.save('report_raw_to_evoked.html', overwrite=True)
@@ -189,6 +202,31 @@ rep.save('report_raw_to_evoked.html', overwrite=True)
 
 
 There are tabs for each subject!
+
+Parallel processing
+-------------------
+
+
+
+{:.input_area}
+```python
+def raw_to_evoked(raw_fname, tmin=-0.1, tmax=0.5):
+    raw = mne.io.read_raw_fif(data_path + '/MEG/sample/' + raw_fname, preload=True)
+    raw.filter(0, 40.)
+    events = mne.find_events(raw, stim_channel='STI 014')
+    epochs = mne.Epochs(raw, events, event_id, tmin, tmax)
+    evoked_l = epochs['Left'].average();
+
+from mne.parallel import parallel_func
+
+fnames = ['sub-01_raw.fif', 'sub-02_raw.fif', 'sub-03_raw.fif']
+parallel, myfunc, _ = parallel_func(raw_to_evoked, n_jobs=3)
+parallel(myfunc(fname) for fname in fnames);
+```
+
+
+BEM sliders
+-----------
 
 What else can you do? You can inspect quality of the BEM with sliders.
 
@@ -229,7 +267,10 @@ bem
 
 
 
-Cherry on the cake
+Check out the report [here](report_bem.html)
+
+Custom HTML
+--------------------
 
 We can even add custom htmls. For example, we can say:
 
@@ -265,11 +306,11 @@ rep.save('report_bem.html', overwrite=True)
 ```
 Saving report to location /home/mainak/Desktop/projects/mne-workshop-brown/content/preprocessing/report_bem.html
 Rendering : Table of Contents
-bem
- ... BEM
 custom
- ... Info table
- ... Info table
+ ... Raw
+ ... Epochs
+ ... Topomap
+ ... Butterfly
  ... Info table
 
 ```
@@ -284,13 +325,12 @@ custom
 
 
 
+Here is the [report](report_bem.html).
 
+Custom sliders
+--------------
 
-{:.input_area}
-```python
 And we can make our own sliders
-```
-
 
 
 
@@ -336,3 +376,20 @@ Evoked Response
 ```
 
 
+
+To learn more about quality assurance, check out [this paper](https://www.biorxiv.org/content/biorxiv/early/2017/12/28/240044.full.pdf)
+
+Exercise
+--------
+
+1) Can you think of creative ways to use the report for your own analysis?
+
+<details>
+<summary>
+Here are some ideas:<br/><br/>
+
+</summary>
+- sections with subject names instead of preprocessing step<br/>
+- custom html/javascript to get quality labels<br/>
+- sliders to browse through the raw data<br/>
+</details>

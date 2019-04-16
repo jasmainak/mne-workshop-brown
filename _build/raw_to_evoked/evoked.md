@@ -3,7 +3,6 @@ redirect_from:
   - "/raw-to-evoked/evoked"
 interact_link: content/raw_to_evoked/evoked.ipynb
 kernel_name: python3
-has_widgets: false
 title: 'Evoked'
 prev_page:
   url: /raw_to_evoked/epochs

@@ -1,8 +1,8 @@
 ---
 title: 'Filtering'
 prev_page:
-  url: /preprocessing/readme
-  title: 'Preprocessing'
+  url: /preprocessing/mne-report
+  title: 'Quality assurance'
 next_page:
   url: /preprocessing/autoreject
   title: 'Autoreject'

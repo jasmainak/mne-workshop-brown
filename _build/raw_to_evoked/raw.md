@@ -3,7 +3,6 @@ redirect_from:
   - "/raw-to-evoked/raw"
 interact_link: content/raw_to_evoked/raw.ipynb
 kernel_name: python3
-has_widgets: false
 title: 'Raw data'
 prev_page:
   url: /raw_to_evoked/readme
