@@ -31,12 +31,13 @@ site:
 	touch _site/.nojekyll
 
 copypush:
+	rm -rf content_master/ && \
 	git clone -b master --single-branch --no-checkout --depth 1 git@github.com:jasmainak/mne-workshop-brown.git content_master/
 	cp -r content/* content_master && \
 	sed -i 's/readme/readme.md/g' content_master/readme.md && \
 	sed -i 's/)/.ipynb)/g' content_master/raw_to_evoked/readme.md && \
 	sed -i 's/)/.ipynb)/g' content_master/preprocessing/readme.md && \
-	rm content_master/*.html && \
+	rm -f content_master/**/*.html && \
 	cd content_master && \
 	git add * && \
 	git commit -a -m 'Copy from gh-pages' && \
