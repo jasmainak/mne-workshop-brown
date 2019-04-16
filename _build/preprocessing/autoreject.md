@@ -23,7 +23,6 @@ We will be covering
 
 * [Marking bad channels](#Marking-bad-channels)
 * [Marking bad epochs](#Marking-bad-epochs)
-* Using annotations
 * [Using autoreject to automatically mark bad channels and epochs](#Autoreject)
 
 Let's first load the raw data as usual
@@ -32,7 +31,7 @@ Let's first load the raw data as usual
 
 {:.input_area}
 ```python
-import numpy as np
+ import numpy as np
 import mne
 from mne.datasets import sample
 
@@ -535,4 +534,4 @@ evoked_clean.info['bads'] = ['MEG 2443']
 
 For more info, visit
 
-http://autoreject.github.io/
+[http://autoreject.github.io/](http://autoreject.github.io/)

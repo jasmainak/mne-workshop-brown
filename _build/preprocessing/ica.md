@@ -75,10 +75,6 @@ Opening raw data file /local_mount/space/meghnn/1/users/mjas/mne_data/MNE-sample
 Ready.
 Current compensation grade : 0
 Reading 0 ... 41699  =      0.000 ...   277.709 secs...
-Filtering raw data in 1 contiguous segment
-Setting up high-pass filter at 1 Hz
-l_trans_bandwidth chosen to be 1.0 Hz
-Filter length of 497 samples (3.310 sec) selected
 
 ```
 
@@ -106,7 +102,7 @@ Filter length of 497 samples (3.310 sec) selected
 
 {:.output .output_data_text}
 ```
-<Raw  |  sample_audvis_filt-0-40_raw.fif, n_channels x n_times : 376 x 41700 (277.7 sec), ~123.3 MB, data loaded>
+<Raw  |  sample_audvis_filt-0-40_raw.fif, n_channels x n_times : 376 x 41700 (277.7 sec), ~123.2 MB, data loaded>
 ```
 
 
@@ -122,7 +118,7 @@ from mne.preprocessing import ICA
 
 raw.plot();
 ica = ICA(n_components=25, method='fastica', random_state=23).fit(raw)
-ica.exclude = [0]
+ica.exclude = [1]
 raw_clean = ica.apply(raw.copy())
 ```
 
@@ -138,7 +134,7 @@ raw_clean = ica.apply(raw.copy())
 Fitting ICA to data using 364 channels (please be patient, this may take a while)
 Inferring max_pca_components from picks
 Selection by number: 25 components
-Fitting ICA took 3.2s.
+Fitting ICA took 3.3s.
 Transforming to ICA space (25 components)
 Zeroing out 1 ICA components
 
@@ -233,7 +229,7 @@ Artifact detected in [4242, 4343]
     Rejecting  epoch based on MAG : ['MEG 1711']
 Artifact detected in [5858, 5959]
 Selection by number: 25 components
-Fitting ICA took 0.8s.
+Fitting ICA took 1.0s.
 <ICA  |  raw data decomposition, fit (fastica): 13635 samples, 25 components, channels used: "mag"; "grad">
 
 ```

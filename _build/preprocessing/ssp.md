@@ -75,7 +75,7 @@ raw = mne.io.read_raw_fif(raw_fname, preload=True)
 
 {:.output .output_stream}
 ```
-Opening raw data file /home/mainak/Desktop/projects/github_repos/mne-python/examples/MNE-sample-data/MEG/sample/sample_audvis_filt-0-40_raw.fif...
+Opening raw data file /local_mount/space/meghnn/1/users/mjas/mne_data/MNE-sample-data/MEG/sample/sample_audvis_filt-0-40_raw.fif...
     Read a total of 4 projection items:
         PCA-v1 (1 x 102)  idle
         PCA-v2 (1 x 102)  idle
@@ -203,25 +203,7 @@ Exercise
 -------------
 What are we plotting here? Is it the SSP operator?
 
-
-
-{:.input_area}
-```python
 What are we plotting here? Is it the SSP operator
-```
-
-
-{:.output .output_traceback_line}
-```
-
-      File "<ipython-input-107-7d516bea2d93>", line 1
-        What are we plotting here? Is it the SSP operator
-               ^
-    SyntaxError: invalid syntax
-
-
-
-```
 
 Add SSP projections
 ---------------------
@@ -311,7 +293,7 @@ fig = evoked.plot_topomap(times, proj='interactive', time_unit='s')
 
 {:.output .output_stream}
 ```
-Opening raw data file /home/mainak/Desktop/projects/github_repos/mne-python/examples/MNE-sample-data/MEG/sample/sample_audvis_filt-0-40_raw.fif...
+Opening raw data file /local_mount/space/meghnn/1/users/mjas/mne_data/MNE-sample-data/MEG/sample/sample_audvis_filt-0-40_raw.fif...
     Read a total of 4 projection items:
         PCA-v1 (1 x 102)  idle
         PCA-v2 (1 x 102)  idle
