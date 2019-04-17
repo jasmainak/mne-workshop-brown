@@ -1,6 +1,7 @@
 ---
 interact_link: content/preprocessing/ssp.ipynb
 kernel_name: python3
+has_widgets: false
 title: 'SSP'
 prev_page:
   url: /preprocessing/autoreject
@@ -75,7 +76,7 @@ raw = mne.io.read_raw_fif(raw_fname, preload=True)
 
 {:.output .output_stream}
 ```
-Opening raw data file /local_mount/space/meghnn/1/users/mjas/mne_data/MNE-sample-data/MEG/sample/sample_audvis_filt-0-40_raw.fif...
+Opening raw data file /home/mainak/Desktop/projects/github_repos/mne-python/examples/MNE-sample-data/MEG/sample/sample_audvis_filt-0-40_raw.fif...
     Read a total of 4 projection items:
         PCA-v1 (1 x 102)  idle
         PCA-v2 (1 x 102)  idle
@@ -203,8 +204,6 @@ Exercise
 -------------
 What are we plotting here? Is it the SSP operator?
 
-What are we plotting here? Is it the SSP operator
-
 Add SSP projections
 ---------------------
 
@@ -263,13 +262,13 @@ Event IDs: [ 1  2  3  4  5 32]
 
 
 {:.output .output_png}
-![png](../images/preprocessing/ssp_25_1.png)
+![png](../images/preprocessing/ssp_24_1.png)
 
 
 
 
 {:.output .output_png}
-![png](../images/preprocessing/ssp_25_2.png)
+![png](../images/preprocessing/ssp_24_2.png)
 
 
 
@@ -293,7 +292,7 @@ fig = evoked.plot_topomap(times, proj='interactive', time_unit='s')
 
 {:.output .output_stream}
 ```
-Opening raw data file /local_mount/space/meghnn/1/users/mjas/mne_data/MNE-sample-data/MEG/sample/sample_audvis_filt-0-40_raw.fif...
+Opening raw data file /home/mainak/Desktop/projects/github_repos/mne-python/examples/MNE-sample-data/MEG/sample/sample_audvis_filt-0-40_raw.fif...
     Read a total of 4 projection items:
         PCA-v1 (1 x 102)  idle
         PCA-v2 (1 x 102)  idle
@@ -308,13 +307,13 @@ Reading 0 ... 41699  =      0.000 ...   277.709 secs...
 
 
 {:.output .output_png}
-![png](../images/preprocessing/ssp_27_1.png)
+![png](../images/preprocessing/ssp_26_1.png)
 
 
 
 
 {:.output .output_png}
-![png](../images/preprocessing/ssp_27_2.png)
+![png](../images/preprocessing/ssp_26_2.png)
 
 
 
@@ -363,7 +362,7 @@ Adding projection: axial--0.200-0.000-PCA-02
 
 
 {:.output .output_png}
-![png](../images/preprocessing/ssp_32_1.png)
+![png](../images/preprocessing/ssp_31_1.png)
 
 
 

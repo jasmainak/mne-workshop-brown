@@ -1,6 +1,7 @@
 ---
 interact_link: content/preprocessing/filtering.ipynb
 kernel_name: python3
+has_widgets: false
 title: 'Filtering'
 prev_page:
   url: /preprocessing/mne-report
@@ -44,13 +45,11 @@ MNE-Python in particular, check out [this link](https://martinos.org/mne/stable/
 
 {:.input_area}
 ```python
-import numpy as np
 import mne
 from mne.datasets import sample
 
 data_path = sample.data_path()
 raw_fname = data_path + '/MEG/sample/sample_audvis_raw.fif'
-proj_fname = data_path + '/MEG/sample/sample_audvis_eog_proj.fif'
 ```
 
 
@@ -71,7 +70,7 @@ raw.info['bads'] = ['MEG 2443', 'EEG 053']  # bads + 2 more
 
 {:.output .output_stream}
 ```
-Opening raw data file /local_mount/space/meghnn/1/users/mjas/mne_data/MNE-sample-data/MEG/sample/sample_audvis_raw.fif...
+Opening raw data file /home/mainak/Desktop/projects/github_repos/mne-python/examples/MNE-sample-data/MEG/sample/sample_audvis_raw.fif...
     Read a total of 3 projection items:
         PCA-v1 (1 x 102)  idle
         PCA-v2 (1 x 102)  idle
@@ -129,6 +128,8 @@ Raw object, specifying an array of frequency to be cut off:
 
 {:.input_area}
 ```python
+import numpy as np
+
 raw.notch_filter(np.arange(60, 241, 60), picks=picks, filter_length='auto',
                  phase='zero')
 raw.plot_psd(area_mode='range', tmax=10.0, picks=picks, average=False);

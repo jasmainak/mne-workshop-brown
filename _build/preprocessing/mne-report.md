@@ -1,6 +1,7 @@
 ---
 interact_link: content/preprocessing/mne-report.ipynb
 kernel_name: python3
+has_widgets: false
 title: 'Quality assurance'
 prev_page:
   url: /preprocessing/readme

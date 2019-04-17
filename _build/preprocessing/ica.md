@@ -1,6 +1,7 @@
 ---
 interact_link: content/preprocessing/ica.ipynb
 kernel_name: python3
+has_widgets: false
 title: 'ICA'
 prev_page:
   url: /preprocessing/ssp
@@ -26,9 +27,9 @@ We want to decompose our data $X \in \mathbb{R}^{C \times T}$
 
 $$ X = As $$ 
 
-where $A \in \mathbb{R}^{C \times M}$ is the mixing matrix and $s \in \mathbb{R}^{M \times T}$ are the (independant) latent sources
+where $A \in \mathbb{R}^{C \times C}$ is the mixing matrix and $s \in \mathbb{R}^{C \times T}$ are the (independant) latent sources
 
-Each row of $s$ is a time series and each column of $A$ is a spatial filter
+Each row of $s$ is a statistically independent time series and each column of $A$ is a spatial filter
 
 ICA finds directions in the feature space
 corresponding to projections with high non-Gaussianity. We thus obtain
