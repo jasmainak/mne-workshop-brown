@@ -6,11 +6,11 @@ kernel_name: python3
 has_widgets: false
 title: 'Forward model'
 prev_page:
-  url: /evoked_to_stc/cov
-  title: 'Covariance'
-next_page:
   url: /evoked_to_stc/stc
   title: 'Source time course'
+next_page:
+  url: /evoked_to_stc/cov
+  title: 'Covariance'
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
 
@@ -64,8 +64,6 @@ raw_fname = data_path + '/MEG/sample/sample_audvis_raw.fif'
 
 # The transformation file obtained by coregistration
 trans = data_path + '/MEG/sample/sample_audvis_raw-trans.fif'
-# Name of the forward to read (precomputed) or compute
-fwd_fname = data_path + '/MEG/sample/sample_audvis-meg-eeg-oct-6-fwd.fif'
 # The paths to freesurfer reconstructions
 subjects_dir = data_path + '/subjects'
 ```
@@ -304,8 +302,8 @@ To reduce computation we'll just compute a single layer BEM
 
 {:.input_area}
 ```python
-# %%time
-
+# Name of the forward to read (precomputed) or compute
+fwd_fname = data_path + '/MEG/sample/sample_audvis-meg-eeg-oct-6-fwd.fif'
 fwd = mne.make_forward_solution(raw_fname, trans=trans, src=src, bem=bem,
                                 meg=True, # include MEG channels
                                 eeg=False, # include EEG channels

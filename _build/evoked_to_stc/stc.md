@@ -3,13 +3,14 @@ redirect_from:
   - "/evoked-to-stc/stc"
 interact_link: content/evoked_to_stc/stc.ipynb
 kernel_name: python3
+has_widgets: false
 title: 'Source time course'
 prev_page:
+  url: /evoked_to_stc/readme
+  title: 'Evoked to source space'
+next_page:
   url: /evoked_to_stc/forward
   title: 'Forward model'
-next_page:
-  url: 
-  title: ''
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
 
@@ -18,27 +19,26 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 The aim of this lecture is to teach you how to compute and apply
 a linear inverse method such as MNE/dSPM/sLORETA on evoked/raw/epochs data.
 
-`
-Authors: Alexandre Gramfort <alexandre.gramfort@telecom-paristech.fr>
-         Denis Engemann <denis.engemann@gmail.com>
-`
+
+
+{:.input_area}
+```python
+%matplotlib inline
+```
+
 
 
 
 {:.input_area}
 ```python
-# add plot inline in the page
-%matplotlib inline
-
 import numpy as np
 import matplotlib.pyplot as plt
 
 import mne
-mne.set_log_level('WARNING')
 ```
 
 
-## Process MEG data
+## Recap: going from raw to evoked
 
 
 
@@ -46,40 +46,26 @@ mne.set_log_level('WARNING')
 ```python
 from mne.datasets import sample
 data_path = sample.data_path()
-# data_path = '/Users/alex/mne_data/MNE-sample-data'
 
 raw_fname = data_path + '/MEG/sample/sample_audvis_filt-0-40_raw.fif'
 
 raw = mne.io.read_raw_fif(raw_fname)
-print(raw)
 ```
 
 
 {:.output .output_stream}
 ```
-<Raw  |  sample_audvis_filt-0-40_raw.fif, n_channels x n_times : 376 x 41700 (277.7 sec), ~3.6 MB, data not loaded>
+Opening raw data file /home/mainak/Desktop/projects/github_repos/mne-python/examples/MNE-sample-data/MEG/sample/sample_audvis_filt-0-40_raw.fif...
+    Read a total of 4 projection items:
+        PCA-v1 (1 x 102)  idle
+        PCA-v2 (1 x 102)  idle
+        PCA-v3 (1 x 102)  idle
+        Average EEG reference (1 x 60)  idle
+    Range : 6450 ... 48149 =     42.956 ...   320.665 secs
+Ready.
+Current compensation grade : 0
 
 ```
-
-Looking at meta data, a.k.a. measurement info, such sampling frequency, channels etc.
-
-
-
-{:.input_area}
-```python
-print(raw.info['sfreq'])
-```
-
-
-{:.output .output_stream}
-```
-150.15374755859375
-
-```
-
-### Define epochs and compute ERP/ERF
-
-First look for events / triggers
 
 
 
@@ -89,39 +75,49 @@ events = mne.find_events(raw, stim_channel='STI 014')
 ```
 
 
+{:.output .output_stream}
+```
+319 events found
+Event IDs: [ 1  2  3  4  5 32]
+
+```
+
 
 
 {:.input_area}
 ```python
 event_id = dict(aud_l=1)  # event trigger and conditions
-tmin = -0.2  # start of each epoch (200ms before the trigger)
-tmax = 0.5  # end of each epoch (500ms after the trigger)
+tmin, tmax = -0.2, 0.5
 raw.info['bads'] = ['MEG 2443', 'EEG 053']
 picks = mne.pick_types(raw.info, meg=True, eeg=False, eog=True, exclude='bads')
-baseline = (None, 0)  # means from the first instant to t = 0
 reject = dict(grad=4000e-13, mag=4e-12, eog=150e-6)
 
 epochs = mne.Epochs(raw, events, event_id, tmin, tmax, proj=True,
-                    picks=picks, baseline=baseline, reject=reject)
-epochs.drop_bad()
-print(epochs.selection.shape)
-print(epochs)
+                    picks=picks, reject=reject, preload=True, verbose=False)
+evoked = epochs.average()
 ```
 
 
-{:.output .output_stream}
-```
-(55,)
-<Epochs  |   55 events (all good), -0.199795 - 0.499488 sec, baseline [None, 0], ~3.5 MB, data not loaded,
- 'aud_l': 55>
+## Math of Source estimation
 
-```
+To compute source estimates, one typically assumes:
+    
+$$M = GX + E$$
+
+where $M \in \mathbb{R}^{C \times T}$ is the sensor data, $G \in \mathbb{R}^{C \times S}$ is the lead-field (or gain) matrix, $X \in \mathbb{R}^{S \times T}$ is the source time course (stc) and $E \in \mathbb{R}^{C \times T}$ is additive Gaussian noise with zero mean and identity covariance
+
+However, noise $E$ does not have identity covariance because of correlation between channels.
+Thus, the noise covariance is computed empirically and made to be identity by "whitening"(more on this later ...)
+
+Thus, the ingredients needed for source estimation are:
+    
+- the gain matrix $G$, computed during the forward calculation, which needs:
+     - *Trans*: the coordinate transformation between head and MEG device
+     - *Source space*: specifying the mesh on which we estimate the source current amplitudes
+     - *Boundary element model (BEM)*: specifying the tissue profile and conductivity
+- noise covariance matrix $EE{^\top}/T$
 
 ## Compute noise covariance
-
-See
-
-Engemann D.A., Gramfort A., Automated model selection in covariance estimation and spatial whitening of MEG and EEG signals, Neuroimage. 2015 Mar
 
 
 
@@ -135,6 +131,25 @@ print(noise_cov.data.shape)
 
 {:.output .output_stream}
 ```
+Computing data rank from raw with rank=None
+Using tolerance 2.8e-09 (2.2e-16 eps * 305 dim * 4.2e+04 max  singular value)
+Estimated rank (mag + grad): 302
+    MEG: rank 302 computed from 3s data channels with 305 projectors
+    Created an SSP operator (subspace dimension = 3)
+Setting small MEG eigenvalues to zero.
+Not doing PCA for MEG.
+Reducing data rank from 305 -> 302
+Estimating covariance using SHRUNK
+Done.
+Estimating covariance using EMPIRICAL
+Done.
+Using cross-validation to select the best estimator.
+Number of samples used : 1705
+log-likelihood on unseen data (descending order):
+   shrunk: -1469.209
+   empirical: -1574.608
+selecting best estimator: shrunk
+[done]
 (305, 305)
 
 ```
@@ -149,13 +164,13 @@ mne.viz.plot_cov(noise_cov, raw.info)
 
 
 {:.output .output_png}
-![png](../images/evoked_to_stc/stc_12_0.png)
+![png](../images/evoked_to_stc/stc_13_0.png)
 
 
 
 
 {:.output .output_png}
-![png](../images/evoked_to_stc/stc_12_1.png)
+![png](../images/evoked_to_stc/stc_13_1.png)
 
 
 
@@ -169,49 +184,25 @@ mne.viz.plot_cov(noise_cov, raw.info)
 
 
 
-## Compute the evoked response
-
-
-
-{:.input_area}
-```python
-evoked = epochs.average()
-evoked.plot()
-evoked.plot_topomap(times=np.linspace(0.05, 0.15, 5), ch_type='mag');
-```
-
-
-
-{:.output .output_png}
-![png](../images/evoked_to_stc/stc_14_0.png)
-
-
-
-
-{:.output .output_png}
-![png](../images/evoked_to_stc/stc_14_1.png)
-
-
-
 # Show whitening
 
+We can verify that the standard deviation is 1
+
 
 
 {:.input_area}
 ```python
-evoked.plot_white(noise_cov);
+evoked.plot_white(noise_cov, verbose=False);
 ```
 
 
 
 {:.output .output_png}
-![png](../images/evoked_to_stc/stc_16_0.png)
+![png](../images/evoked_to_stc/stc_15_0.png)
 
 
 
 ## Inverse modeling with MNE and dSPM on evoked and raw data
-
-Import the required functions:
 
 
 
@@ -223,29 +214,17 @@ from mne.minimum_norm import (make_inverse_operator, apply_inverse,
 ```
 
 
-## Read the forward solution and compute the inverse operator
-
-MNE/dSPM/sLORETA lead to linear inverse model than are independant
-from the data (just the noise covariance) and can therefore be
-precomputed and applied to data in a later stage.
+MNE/dSPM/sLORETA lead to linear inverse model that can be precomputed and applied to data in a later stage.
 
 
 
 {:.input_area}
 ```python
 fname_fwd = data_path + '/MEG/sample/sample_audvis-meg-oct-6-fwd.fif'
-fwd = mne.read_forward_solution(fname_fwd)
+fwd = mne.read_forward_solution(fname_fwd, verbose=False)
 
-# Restrict forward solution as necessary for MEG
-fwd = mne.pick_types_forward(fwd, meg=True, eeg=False)
-
-# make an M/EEG, MEG-only, and EEG-only inverse operators
-info = evoked.info
-inverse_operator = make_inverse_operator(info, fwd, noise_cov,
-                                         loose=0.2, depth=0.8)
-
-write_inverse_operator('sample_audvis-meg-oct-6-inv.fif',
-                       inverse_operator)
+inverse_operator = make_inverse_operator(evoked.info, fwd, noise_cov,
+                                         loose=0.2, depth=0.8, verbose=False)
 ```
 
 
@@ -259,7 +238,7 @@ method = "dSPM"
 snr = 3.
 lambda2 = 1. / snr ** 2
 stc = apply_inverse(evoked, inverse_operator, lambda2,
-                    method=method, pick_ori=None)
+                    method=method, pick_ori=None, verbose=False)
 print(stc)
 ```
 
@@ -296,18 +275,12 @@ stc.save('fixed_ori')
 ```
 
 
-
-
-{:.input_area}
-```python
-# make one with no orientation constraint (free orientation)
-# inverse_operator = make_inverse_operator(info, fwd, noise_cov,
-#                                          loose=1., depth=0.8)
-# stc = apply_inverse(evoked, inverse_operator, lambda2,
-#                     method=method, pick_ori=None)
-# stc.save('free_ori')
+{:.output .output_stream}
 ```
+Writing STC to disk...
+[done]
 
+```
 
 The STC (Source Time Courses) are defined on a source space formed by 7498 candidate
 locations and for a duration spanning 106 time instants.
@@ -333,6 +306,7 @@ mlab.show()
 {:.output .output_stream}
 ```
 Notebook initialized with png backend.
+Using control points [ 3.63327823  4.26167739 17.03691213]
 colormap sequential: [8.00e+00, 1.20e+01, 1.50e+01] (transparent)
 
 ```
@@ -350,7 +324,7 @@ Image(filename='dspm.jpg', width=600)
 
 
 
-![jpeg](../images/evoked_to_stc/stc_30_0.jpeg)
+![jpeg](../images/evoked_to_stc/stc_27_0.jpeg)
 
 
 
@@ -361,7 +335,9 @@ Image(filename='dspm.jpg', width=600)
 {:.input_area}
 ```python
 subjects_dir = data_path + '/subjects'
-stc_fsaverage = stc.morph(subject_to='fsaverage', subjects_dir=subjects_dir)
+morph = mne.compute_source_morph(stc, subject_from='sample', subject_to='fsaverage',
+                                 subjects_dir=subjects_dir)
+stc_fsaverage = morph.apply(stc)
 ```
 
 
@@ -373,19 +349,10 @@ stc_fsaverage.save('fsaverage_dspm')
 ```
 
 
-{:.output .output_traceback_line}
+{:.output .output_stream}
 ```
-
-    ---------------------------------------------------------------------------
-
-    NameError                                 Traceback (most recent call last)
-
-    <ipython-input-19-98039c85d2eb> in <module>()
-    ----> 1 stc_fsaverage.save('fsaverage_dspm')
-    
-
-    NameError: name 'stc_fsaverage' is not defined
-
+Writing STC to disk...
+[done]
 
 ```
 
@@ -401,6 +368,23 @@ brain_fsaverage.show_view('lateral')
 ```
 
 
+{:.output .output_stream}
+```
+Using control points [ 3.35412831  3.91588156 14.82235775]
+colormap sequential: [8.00e+00, 1.20e+01, 1.50e+01] (transparent)
+
+```
+
+
+
+
+{:.output .output_data_text}
+```
+((-7.016709298534877e-15, 90.0, 430.9261779785156, array([0., 0., 0.])), -90.0)
+```
+
+
+
 
 
 {:.input_area}
@@ -409,6 +393,13 @@ brain_fsaverage.save_image('dspm_fsaverage.jpg')
 from IPython.display import Image
 Image(filename='dspm_fsaverage.jpg', width=600)
 ```
+
+
+
+
+
+![jpeg](../images/evoked_to_stc/stc_32_0.jpeg)
+
 
 
 ### Solving the inverse problem on raw data or epochs using Freesurfer labels
@@ -429,13 +420,29 @@ Compute inverse solution during the first 15s:
 {:.input_area}
 ```python
 from mne.minimum_norm import apply_inverse_raw, apply_inverse_epochs
-
 start, stop = raw.time_as_index([0, 15])  # read the first 15s of data
-
 stc = apply_inverse_raw(raw, inverse_operator, lambda2, method, label,
                         start, stop)
 ```
 
+
+{:.output .output_stream}
+```
+Preparing the inverse operator for use...
+    Scaled noise and source covariance from nave = 1 to nave = 1
+    Created the regularized inverter
+    Created an SSP operator (subspace dimension = 3)
+    Created the whitener using a noise covariance matrix with rank 302 (3 small eigenvalues omitted)
+    Computing noise-normalization factors (dSPM)...
+[done]
+Applying inverse to raw...
+    Picked 305 channels from the data
+    Computing inverse...
+    Eigenleads need to be weighted ...
+    combining the current components...
+[done]
+
+```
 
 Plot the dSPM time courses in the label
 
@@ -448,6 +455,22 @@ plt.plot(stc.times, stc.data.T)
 plt.xlabel('time (s)')
 plt.ylabel('dSPM value')
 ```
+
+
+
+
+
+{:.output .output_data_text}
+```
+Text(0, 0.5, 'dSPM value')
+```
+
+
+
+
+{:.output .output_png}
+![png](../images/evoked_to_stc/stc_38_1.png)
+
 
 
 And on epochs:
@@ -468,23 +491,117 @@ stc_evoked = apply_inverse(evoked, inverse_operator, lambda2, method,
 
 stc_evoked_label = stc_evoked.in_label(label)
 
-# Mean across trials but not across vertices in label
-mean_stc = np.sum(stcs) / len(stcs)
+# Average over label (not caring to align polarities here)
+label_mean_evoked = np.mean(stc_evoked_label.data, axis=0)
 ```
 
+
+{:.output .output_stream}
+```
+Preparing the inverse operator for use...
+    Scaled noise and source covariance from nave = 1 to nave = 55
+    Created the regularized inverter
+    Created an SSP operator (subspace dimension = 3)
+    Created the whitener using a noise covariance matrix with rank 302 (3 small eigenvalues omitted)
+    Computing noise-normalization factors (dSPM)...
+[done]
+Picked 305 channels from the data
+Computing inverse...
+    Eigenleads need to be weighted ...
+Processing epoch : 1 / 55
+Processing epoch : 2 / 55
+Processing epoch : 3 / 55
+Processing epoch : 4 / 55
+Processing epoch : 5 / 55
+Processing epoch : 6 / 55
+Processing epoch : 7 / 55
+Processing epoch : 8 / 55
+Processing epoch : 9 / 55
+Processing epoch : 10 / 55
+Processing epoch : 11 / 55
+Processing epoch : 12 / 55
+Processing epoch : 13 / 55
+Processing epoch : 14 / 55
+Processing epoch : 15 / 55
+Processing epoch : 16 / 55
+Processing epoch : 17 / 55
+Processing epoch : 18 / 55
+Processing epoch : 19 / 55
+Processing epoch : 20 / 55
+Processing epoch : 21 / 55
+Processing epoch : 22 / 55
+Processing epoch : 23 / 55
+Processing epoch : 24 / 55
+Processing epoch : 25 / 55
+Processing epoch : 26 / 55
+Processing epoch : 27 / 55
+Processing epoch : 28 / 55
+Processing epoch : 29 / 55
+Processing epoch : 30 / 55
+Processing epoch : 31 / 55
+Processing epoch : 32 / 55
+Processing epoch : 33 / 55
+Processing epoch : 34 / 55
+Processing epoch : 35 / 55
+Processing epoch : 36 / 55
+Processing epoch : 37 / 55
+Processing epoch : 38 / 55
+Processing epoch : 39 / 55
+Processing epoch : 40 / 55
+Processing epoch : 41 / 55
+Processing epoch : 42 / 55
+Processing epoch : 43 / 55
+Processing epoch : 44 / 55
+Processing epoch : 45 / 55
+Processing epoch : 46 / 55
+Processing epoch : 47 / 55
+Processing epoch : 48 / 55
+Processing epoch : 49 / 55
+Processing epoch : 50 / 55
+Processing epoch : 51 / 55
+Processing epoch : 52 / 55
+Processing epoch : 53 / 55
+Processing epoch : 54 / 55
+Processing epoch : 55 / 55
+[done]
+Preparing the inverse operator for use...
+    Scaled noise and source covariance from nave = 1 to nave = 55
+    Created the regularized inverter
+    Created an SSP operator (subspace dimension = 3)
+    Created the whitener using a noise covariance matrix with rank 302 (3 small eigenvalues omitted)
+    Computing noise-normalization factors (dSPM)...
+[done]
+Applying inverse operator to "aud_l"...
+    Picked 305 channels from the data
+    Computing inverse...
+    Eigenleads need to be weighted ...
+    Computing residual...
+    Explained  66.1% variance
+    dSPM...
+[done]
+
+```
+
+Mean across trials but not across vertices in label
 
 
 
 {:.input_area}
 ```python
-# compute sign flip to avoid signal cancelation when averaging signed values
+mean_stc = np.sum(stcs) / len(stcs)
+```
+
+
+Take the mean across vertices in an ROI
+
+
+
+{:.input_area}
+```python
 flip = mne.label_sign_flip(label, inverse_operator['src'])
 
 label_mean = np.mean(mean_stc.data, axis=0)
 label_mean_flip = np.mean(flip[:, np.newaxis] * mean_stc.data, axis=0)
-
-# Average over label (not caring to align polarities here)
-label_mean_evoked = np.mean(stc_evoked_label.data, axis=0)
 ```
 
 
@@ -498,9 +615,8 @@ times = 1e3 * stcs[0].times  # times in ms
 
 plt.figure()
 h0 = plt.plot(times, mean_stc.data.T, 'k')
-h1, = plt.plot(times, label_mean, 'r', linewidth=3)
-h2, = plt.plot(times, label_mean_flip, 'g', linewidth=3)
-plt.legend((h0[0], h1, h2), ('all dipoles in label', 'mean',
+h1, = plt.plot(times, label_mean_flip, 'r', linewidth=3)
+plt.legend((h0[0], h1), ('all dipoles in label',
                              'mean with sign flip'))
 plt.xlabel('time (ms)')
 plt.ylabel('dSPM value')
@@ -508,7 +624,14 @@ plt.show()
 ```
 
 
+
+{:.output .output_png}
+![png](../images/evoked_to_stc/stc_46_0.png)
+
+
+
 Viewing single trial dSPM and average dSPM for unflipped pooling over label
+
 Compare to (1) Inverse (dSPM) then average, (2) Evoked then dSPM
 
 
@@ -537,11 +660,12 @@ plt.show()
 ```
 
 
+
+{:.output .output_png}
+![png](../images/evoked_to_stc/stc_48_0.png)
+
+
+
 ## Exercises
 - Run sLORETA on the same data and compare source localizations
 - Run an LCMV beamformer on the same data and compare source localizations
-
-### Going further:
-- http://martinos.org/mne/dev/auto_examples/inverse/plot_compute_mne_inverse_epochs_in_label.html
-- http://martinos.org/mne/dev/auto_examples/inverse/plot_label_source_activations.html
-- http://martinos.org/mne/dev/auto_examples/inverse/plot_label_from_stc.html

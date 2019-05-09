@@ -89,13 +89,13 @@
   not_numbered: true
   expand_sections: true
   sections:
-  - title: Covariance
-    url: /evoked_to_stc/cov
+  - title: Source time course
+    url: /evoked_to_stc/stc
     not_numbered: true
   - title: Forward model
     url: /evoked_to_stc/forward
     not_numbered: true
-  - title: Source time course
-    url: /evoked_to_stc/stc
+  - title: Covariance
+    url: /evoked_to_stc/cov
     not_numbered: true
 

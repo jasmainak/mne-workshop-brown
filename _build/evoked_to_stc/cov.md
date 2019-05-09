@@ -3,13 +3,14 @@ redirect_from:
   - "/evoked-to-stc/cov"
 interact_link: content/evoked_to_stc/cov.ipynb
 kernel_name: python3
+has_widgets: false
 title: 'Covariance'
 prev_page:
-  url: /evoked_to_stc/readme
-  title: 'Evoked to source space'
-next_page:
   url: /evoked_to_stc/forward
   title: 'Forward model'
+next_page:
+  url: 
+  title: ''
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
 
