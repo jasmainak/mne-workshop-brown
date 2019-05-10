@@ -615,8 +615,9 @@ times = 1e3 * stcs[0].times  # times in ms
 
 plt.figure()
 h0 = plt.plot(times, mean_stc.data.T, 'k')
-h1, = plt.plot(times, label_mean_flip, 'r', linewidth=3)
-plt.legend((h0[0], h1), ('all dipoles in label',
+h1, = plt.plot(times, label_mean, 'r', linewidth=3)
+h2, = plt.plot(times, label_mean_flip, 'g', linewidth=3)
+plt.legend((h0[0], h1, h2), ('all dipoles in label', 'mean',
                              'mean with sign flip'))
 plt.xlabel('time (ms)')
 plt.ylabel('dSPM value')
@@ -668,4 +669,3 @@ plt.show()
 
 ## Exercises
 - Run sLORETA on the same data and compare source localizations
-- Run an LCMV beamformer on the same data and compare source localizations

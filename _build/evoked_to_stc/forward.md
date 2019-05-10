@@ -16,7 +16,7 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 
 # Forward computation
 
-To compute source estimates, one typically assumes:
+Recall, to compute source estimates, one typically assumes:
     
 $$M = GX + E$$
 
@@ -94,9 +94,9 @@ mne.viz.plot_bem(subject='sample', subjects_dir=subjects_dir,
 
 {:.output .output_stream}
 ```
-Using surface: /home/jovyan/mne_data/MNE-sample-data/subjects/sample/bem/inner_skull.surf
-Using surface: /home/jovyan/mne_data/MNE-sample-data/subjects/sample/bem/outer_skull.surf
-Using surface: /home/jovyan/mne_data/MNE-sample-data/subjects/sample/bem/outer_skin.surf
+Using surface: /home/mainak/Desktop/projects/github_repos/mne-python/examples/MNE-sample-data/subjects/sample/bem/inner_skull.surf
+Using surface: /home/mainak/Desktop/projects/github_repos/mne-python/examples/MNE-sample-data/subjects/sample/bem/outer_skull.surf
+Using surface: /home/mainak/Desktop/projects/github_repos/mne-python/examples/MNE-sample-data/subjects/sample/bem/outer_skin.surf
 
 ```
 
@@ -110,8 +110,6 @@ Using surface: /home/jovyan/mne_data/MNE-sample-data/subjects/sample/bem/outer_s
 
 {:.input_area}
 ```python
-# %%time
-
 conductivity = (0.3,)  # for single layer
 # conductivity = (0.3, 0.006, 0.3)  # for three layers
 model = mne.make_bem_model(subject='sample', ico=4,
@@ -134,7 +132,7 @@ Approximation method : Linear collocation
 Homogeneous model surface loaded.
 Computing the linear collocation solution...
     Matrix coefficients...
-        inner_skull (2562) -> inner_skull (2562) ...
+        inner skull (2562) -> inner skull (2562) ...
     Inverting the coefficient matrix...
 Solution ready.
 BEM geometry computations complete.
@@ -496,73 +494,6 @@ make_field_map?
 
 
 
-{:.output .output_data_text}
-```
-[0;31mSignature:[0m
-[0mmake_field_map[0m[0;34m([0m[0;34m[0m
-[0;34m[0m    [0mevoked[0m[0;34m,[0m[0;34m[0m
-[0;34m[0m    [0mtrans[0m[0;34m=[0m[0;34m'auto'[0m[0;34m,[0m[0;34m[0m
-[0;34m[0m    [0msubject[0m[0;34m=[0m[0;32mNone[0m[0;34m,[0m[0;34m[0m
-[0;34m[0m    [0msubjects_dir[0m[0;34m=[0m[0;32mNone[0m[0;34m,[0m[0;34m[0m
-[0;34m[0m    [0mch_type[0m[0;34m=[0m[0;32mNone[0m[0;34m,[0m[0;34m[0m
-[0;34m[0m    [0mmode[0m[0;34m=[0m[0;34m'fast'[0m[0;34m,[0m[0;34m[0m
-[0;34m[0m    [0mmeg_surf[0m[0;34m=[0m[0;34m'helmet'[0m[0;34m,[0m[0;34m[0m
-[0;34m[0m    [0morigin[0m[0;34m=[0m[0;34m([0m[0;36m0.0[0m[0;34m,[0m [0;36m0.0[0m[0;34m,[0m [0;36m0.04[0m[0;34m)[0m[0;34m,[0m[0;34m[0m
-[0;34m[0m    [0mn_jobs[0m[0;34m=[0m[0;36m1[0m[0;34m,[0m[0;34m[0m
-[0;34m[0m    [0mverbose[0m[0;34m=[0m[0;32mNone[0m[0;34m,[0m[0;34m[0m
-[0;34m[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
-[0;31mDocstring:[0m
-Compute surface maps used for field display in 3D.
-
-Parameters
-----------
-evoked : Evoked | Epochs | Raw
-    The measurement file. Need to have info attribute.
-trans : str | 'auto' | None
-    The full path to the `*-trans.fif` file produced during
-    coregistration. If present or found using 'auto'
-    the maps will be in MRI coordinates.
-    If None, map for EEG data will not be available.
-subject : str | None
-    The subject name corresponding to FreeSurfer environment
-    variable SUBJECT. If None, map for EEG data will not be available.
-subjects_dir : str
-    The path to the freesurfer subjects reconstructions.
-    It corresponds to Freesurfer environment variable SUBJECTS_DIR.
-ch_type : None | 'eeg' | 'meg'
-    If None, a map for each available channel type will be returned.
-    Else only the specified type will be used.
-mode : str
-    Either `'accurate'` or `'fast'`, determines the quality of the
-    Legendre polynomial expansion used. `'fast'` should be sufficient
-    for most applications.
-meg_surf : str
-    Should be ``'helmet'`` or ``'head'`` to specify in which surface
-    to compute the MEG field map. The default value is ``'helmet'``
-origin : array-like, shape (3,) | str
-    Origin of the sphere in the head coordinate frame and in meters.
-    Can be ``'auto'``, which means a head-digitization-based origin
-    fit. Default is ``(0., 0., 0.04)``.
-
-    .. versionadded:: 0.11
-n_jobs : int
-    The number of jobs to run in parallel.
-verbose : bool, str, int, or None
-    If not None, override default verbose level (see :func:`mne.verbose`
-    and :ref:`Logging documentation <tut_logging>` for more).
-
-Returns
--------
-surf_maps : list
-    The surface maps to be used for field plots. The list contains
-    separate ones for MEG and EEG (if both MEG and EEG are present).
-[0;31mFile:[0m      /opt/conda/lib/python3.7/site-packages/mne/forward/_field_interpolation.py
-[0;31mType:[0m      function
-
-```
-
-
-
 
 {:.input_area}
 ```python
@@ -614,9 +545,5 @@ Plot the sensitivity maps for EEG and compare it with the MEG, can you justify t
 
 - MEG is not sensitive to radial sources
 - EEG is more sensitive to deep sources
-
-How will the MEG sensitivity maps and histograms change if you use a free instead if a fixed orientation?
-
-Try this changing the `mode` parameter in `mne.sensitivity_map` accordingly.
 
 Why don't we see any dipoles on the gyri?
