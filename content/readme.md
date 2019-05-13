@@ -3,9 +3,9 @@
 ||   |
 |:------|:------|
 | **Where**      | 164 Angell St. floor 4 Innovation Zone (at Brown University) |
-| **When**       | Friday, April 5th 10:30-12:30          |
-| 				 | Wednesday, April 17th 12:00-14:00      |
-|				 | Friday, May 10th 12:00-14:00			  |
+| **When**       | Friday, April 5th 10:30-12:30 [Video](https://www.dropbox.com/s/x0elvmo6785o7tb/20190405_mne_workshop_day1.mp4?dl=0)         |
+| 				 | Wednesday, April 17th 12:00-14:00 [Video coming soon ...]     |
+|				 | Friday, May 10th 12:00-14:00	[Video coming soon ...]		  |
 | **Who**        | The workshop is aimed at MEG/EEG researchers getting started with analyzing data in MNE-Python.|
 | **Why**        | [MNE-Python](https://martinos.org/mne/stable/index.html) is an open source software package to analyze, visualize, and explore electro-/magnetoencephalography (M/EEG) data. The package is written in Python which has a growing scientific ecosystem (numpy, scipy, matplotlib, scikit-learn, pandas) and is popular as a clean and versatile language.|
 | **Instructor** | [Mainak Jas](http://jasmainak.github.io/) |
