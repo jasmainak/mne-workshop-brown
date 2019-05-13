@@ -3,7 +3,7 @@
 ||   |
 |:------|:------|
 | **Where**      | 164 Angell St. floor 4 Innovation Zone (at Brown University) |
-| **When**       | Friday, April 5th 10:30-12:30 [Video](https://www.dropbox.com/s/x0elvmo6785o7tb/20190405_mne_workshop_day1.mp4?dl=0)         |
+| **When**       | Friday, April 5th 10:30-12:30 [[Video](https://www.dropbox.com/s/x0elvmo6785o7tb/20190405_mne_workshop_day1.mp4?dl=0)]         |
 | 				 | Wednesday, April 17th 12:00-14:00 [Video coming soon ...]     |
 |				 | Friday, May 10th 12:00-14:00	[Video coming soon ...]		  |
 | **Who**        | The workshop is aimed at MEG/EEG researchers getting started with analyzing data in MNE-Python.|
